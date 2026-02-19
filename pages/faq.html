@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - CORRIESELLS</title>
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/pro.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-wrapper">
+            <div class="container">
+                <div class="header-container">
+                    <div class="logo">
+                        <a href="../index.html">
+                            <img src="../assets/images/logo.png" alt="CORRIESELLS Logo" class="logo-image">
+                            <span>CORRIESELLS</span>
+                        </a>
+                    </div>
+                    <nav style="margin: 0 auto;"><ul style="gap: 0;"></ul></nav>
+                    <div class="header-icons">
+                        <button class="nav-icon icon-btn" onclick="window.location.href='../index.html'">
+                            <i class="fas fa-home"></i>
+                        </button>
+                        <button class="cart-icon icon-btn">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="badge">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="faq-hero">
+        <div class="container faq-hero-inner">
+            <div class="faq-hero-copy">
+                <p class="faq-kicker">Support Center</p>
+                <h1 class="faq-title">Frequently Asked Questions</h1>
+                <p class="faq-subtitle">Concise answers to common questions about shipping, returns, sizing, and payments.</p>
+                <div class="faq-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="faqSearch" placeholder="Search the FAQs">
+                </div>
+                <div class="faq-actions">
+                    <a class="btn btn-primary" href="contact.html">Contact Support</a>
+                    <a class="btn btn-outline" href="shipping.html">Shipping Info</a>
+                </div>
+            </div>
+            <div class="faq-hero-panel">
+                <div class="faq-hero-card">
+                    <div class="faq-hero-stat">
+                        <strong>24h</strong>
+                        <span>Typical response time</span>
+                    </div>
+                    <div class="faq-hero-stat">
+                        <strong>150+</strong>
+                        <span>Countries served</span>
+                    </div>
+                    <div class="faq-hero-stat">
+                        <strong>30 days</strong>
+                        <span>Easy returns window</span>
+                    </div>
+                </div>
+                <p class="faq-hero-note">Can’t find the answer? Our team is ready to help.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="container faq-content">
+        <div class="faq-tiles">
+            <a class="faq-tile" href="#shipping">
+                <span class="faq-tile-icon"><i class="fas fa-truck"></i></span>
+                <div>
+                    <h3>Shipping & Delivery</h3>
+                    <p>Options, timelines, and tracking details.</p>
+                </div>
+            </a>
+            <a class="faq-tile" href="#returns">
+                <span class="faq-tile-icon"><i class="fas fa-undo-alt"></i></span>
+                <div>
+                    <h3>Returns & Refunds</h3>
+                    <p>How returns work and when refunds land.</p>
+                </div>
+            </a>
+            <a class="faq-tile" href="#sizing">
+                <span class="faq-tile-icon"><i class="fas fa-ruler-combined"></i></span>
+                <div>
+                    <h3>Sizing & Fit</h3>
+                    <p>Find your best size and fit tips.</p>
+                </div>
+            </a>
+            <a class="faq-tile" href="#payment">
+                <span class="faq-tile-icon"><i class="fas fa-credit-card"></i></span>
+                <div>
+                    <h3>Payment & Orders</h3>
+                    <p>Methods, security, and order edits.</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="faq-sections">
+            <div class="faq-section" id="shipping">
+                <div class="faq-section-header">
+                    <h2>Shipping & Delivery</h2>
+                    <p>Delivery timelines and tracking for every order.</p>
+                </div>
+                <div class="faq-accordion">
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>What are the shipping options?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer" hidden>
+                            We offer domestic shipping for USA/Canada: Standard (5-7 business days, free on orders over $10,000), Express (2-3 business days, $15), and Overnight (next business day, $30).
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>Do you ship internationally?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer" hidden>
+                            Yes, we ship to 150+ countries via DHL, FedEx, and UPS. International shipping rates are calculated at checkout based on destination and weight, and duties or taxes may apply.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>Can I track my order?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer" hidden>
+                            All orders include tracking. You’ll receive a tracking number via email once your order ships. Tracking is also available in your account dashboard.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>Will I have to pay customs or duties?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer" hidden>
+                            For international orders, customers are responsible for any customs duties or import taxes. These are determined by the destination country.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-section" id="returns">
+                <div class="faq-section-header">
+                    <h2>Returns & Refunds</h2>
+                    <p>Simple returns, clear timelines, no surprises.</p>
+                </div>
+                <div class="faq-accordion">
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>What’s your return policy?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer" hidden>
+                            Returns are accepted within 30 days for items in original condition with tags attached. Return shipping is free for most countries.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>How long do refunds take?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer" hidden>
+                            Refunds are processed within 5-7 business days after we receive your return. Your bank may take additional time to post the credit.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-section" id="sizing">
+                <div class="faq-section-header">
+                    <h2>Sizing & Fit</h2>
+                    <p>Use the size guide and product reviews for fit advice.</p>
+                </div>
+                <div class="faq-accordion">
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>How do I know my size?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer" hidden>
+                            Check the size guide on each product page. We list measurements for chest, length, and more.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>Do your items run large or small?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer" hidden>
+                            Most items are true to size. For relaxed fits, size up if you’re between sizes.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-section" id="payment">
+                <div class="faq-section-header">
+                    <h2>Payment & Orders</h2>
+                    <p>Secure checkout and fast order handling.</p>
+                </div>
+                <div class="faq-accordion">
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>What payment methods do you accept?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer" hidden>
+                            We accept credit and debit cards, PayPal, Google Pay, and Apple Pay. All transactions are encrypted.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>Is my payment information secure?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer" hidden>
+                            Yes. We use SSL encryption and PCI-compliant processing. We never store your full payment details.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>Can I cancel my order?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer" hidden>
+                            Orders can be cancelled within 24 hours before shipping. Contact support as soon as possible.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 CORRIESELLS</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+    <script>
+        const faqItems = Array.from(document.querySelectorAll('.faq-item'));
+        const searchInput = document.getElementById('faqSearch');
+        const faqSections = Array.from(document.querySelectorAll('.faq-section'));
+
+        faqItems.forEach((item) => {
+            const trigger = item.querySelector('.faq-question');
+            const panel = item.querySelector('.faq-answer');
+            if (!trigger || !panel) return;
+            trigger.addEventListener('click', () => {
+                const isOpen = item.classList.toggle('is-open');
+                trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                panel.hidden = !isOpen;
+            });
+        });
+
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                const query = searchInput.value.trim().toLowerCase();
+                faqItems.forEach((item) => {
+                    const match = item.textContent.toLowerCase().includes(query);
+                    item.classList.toggle('is-hidden', query.length > 0 && !match);
+                });
+                faqSections.forEach((section) => {
+                    const hasVisible = section.querySelector('.faq-item:not(.is-hidden)');
+                    section.classList.toggle('is-hidden', !hasVisible);
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>
+

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist - CORRIESELLS</title>
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/pro.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-wrapper">
+            <div class="container">
+                <div class="header-container">
+                    <div class="logo"><a href="../index.html"><img src="../assets/images/logo.png" alt="CORRIESELLS Logo" class="logo-image"><span>CORRIESELLS</span></a></div>
+                    <nav style="margin: 0;"></nav>
+                    <div class="header-icons">
+                        <button class="icon-btn account-btn" onclick="window.location.href='account.html'" aria-label="Account">
+                            <img class="account-avatar-image" alt="" loading="lazy">
+                            <i class="fas fa-user account-avatar-icon" aria-hidden="true"></i>
+                        </button>
+                        <button class="cart-icon icon-btn"><i class="fas fa-shopping-bag"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="container" style="padding: var(--spacing-2xl) var(--spacing-lg);">
+        <h1>My Wishlist</h1>
+        <p style="color: var(--text-muted); margin-bottom: var(--spacing-2xl);">Your favorite items saved for later</p>
+
+        <div class="drawer-backdrop" data-drawer-backdrop="wishlist"></div>
+        <div class="drawer-toolbar">
+            <button class="btn btn-outline drawer-toggle" type="button" data-drawer-toggle="wishlist" aria-controls="wishlistDrawer" aria-expanded="false">
+                <i class="fas fa-heart"></i> View Wishlist
+            </button>
+        </div>
+
+        <div id="wishlistDrawer" class="mobile-drawer drawer-right" data-drawer="wishlist">
+            <div class="drawer-header">
+                <h2 style="margin: 0;">Wishlist</h2>
+                <button class="drawer-close" type="button" data-drawer-close="wishlist" aria-label="Close wishlist">&times;</button>
+            </div>
+            <div id="wishlistGrid" class="grid grid-3">
+                <!-- Wishlist items will be rendered here by JavaScript -->
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: var(--spacing-2xl);">
+            <a href="shop.html" class="btn btn-primary">Continue Shopping</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-bottom container" style="padding: var(--spacing-lg);">
+            <p>&copy; 2026 CORRIESELLS</p>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
+

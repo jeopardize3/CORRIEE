@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - CORRIESELLS</title>
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/pro.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --cart-ink: #1c1a17;
+            --cart-muted: #6d645a;
+            --cart-accent: #c98a2f;
+            --cart-border: rgba(28, 26, 23, 0.12);
+            --cart-surface: #ffffff;
+            --cart-shadow: 0 16px 44px rgba(28, 26, 23, 0.12);
+        }
+        .cart-page {
+            background: linear-gradient(180deg, #f9f6f1 0%, #f2ede6 100%);
+        }
+        .cart-main {
+            padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-3xl);
+        }
+        .cart-hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-2xl);
+            flex-wrap: wrap;
+        }
+        .cart-eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 0.28em;
+            font-size: 0.75rem;
+            color: var(--cart-muted);
+            margin-bottom: var(--spacing-sm);
+        }
+        .cart-title {
+            margin: 0 0 var(--spacing-sm);
+            font-size: clamp(2rem, 3vw, 2.75rem);
+            color: var(--cart-ink);
+        }
+        .cart-title span {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--cart-muted);
+            margin-left: var(--spacing-sm);
+        }
+        .cart-subtitle {
+            color: var(--cart-muted);
+            max-width: 520px;
+        }
+        .cart-trust {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--cart-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-md) var(--spacing-lg);
+            box-shadow: 0 10px 24px rgba(28, 26, 23, 0.08);
+        }
+        .cart-trust i {
+            color: var(--cart-accent);
+            background: rgba(201, 138, 47, 0.15);
+            padding: 0.6rem;
+            border-radius: 50%;
+        }
+        .cart-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 360px;
+            gap: var(--spacing-2xl);
+        }
+        .cart-card {
+            background: var(--cart-surface);
+            border: 1px solid var(--cart-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: var(--cart-shadow);
+        }
+        .cart-card h2 {
+            margin: 0 0 var(--spacing-lg);
+            font-size: 1.4rem;
+        }
+        .summary-card {
+            position: sticky;
+            top: var(--spacing-2xl);
+            align-self: start;
+        }
+        .cart-item-row {
+            display: grid;
+            grid-template-columns: 80px 1fr auto;
+            gap: var(--spacing-lg);
+            padding: var(--spacing-lg) 0;
+            border-bottom: 1px dashed var(--cart-border);
+        }
+        .cart-item-row:last-of-type { border-bottom: none; }
+        .cart-item-row img {
+            width: 80px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--cart-border);
+        }
+        .cart-item-title { font-weight: 600; margin-bottom: 4px; }
+        .cart-item-meta { color: var(--cart-muted); font-size: 0.9rem; }
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-sm);
+        }
+        .qty-control input {
+            width: 60px;
+            text-align: center;
+            border: var(--border-light);
+            border-radius: var(--radius-sm);
+            height: 38px;
+        }
+        .cart-empty {
+            border: 1px dashed var(--cart-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            text-align: center;
+            color: var(--cart-muted);
+            background: rgba(255, 255, 255, 0.7);
+        }
+        .cart-empty i {
+            font-size: 2rem;
+            color: var(--cart-accent);
+            margin-bottom: var(--spacing-md);
+        }
+        .promo-row {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-lg);
+        }
+        .promo-row input {
+            flex: 1;
+            height: 46px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--cart-border);
+            padding: 0 var(--spacing-md);
+        }
+        .promo-note {
+            margin-top: var(--spacing-sm);
+            color: var(--cart-muted);
+            font-size: 0.85rem;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-sm);
+            color: var(--cart-ink);
+        }
+        .summary-row.muted { color: var(--cart-muted); }
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-top: var(--spacing-md);
+        }
+        @media (max-width: 980px) {
+            .cart-grid { grid-template-columns: 1fr; }
+            .summary-card { position: static; }
+            .summary-card.mobile-drawer { position: fixed; }
+        }
+    </style>
+</head>
+<body class="cart-page">
+    <header>
+        <div class="header-wrapper">
+            <div class="container">
+                <div class="header-container">
+                    <div class="logo">
+                        <a href="../index.html">
+                            <img src="../assets/images/logo.png" alt="CORRIESELLS Logo" class="logo-image">
+                            <span>CORRIESELLS</span>
+                        </a>
+                    </div>
+                    <nav style="margin-left:auto;"></nav>
+                    <div class="header-icons">
+                        <button class="nav-icon icon-btn" onclick="window.location.href='../index.html'">
+                            <i class="fas fa-home"></i>
+                        </button>
+                        <button class="cart-icon icon-btn">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="badge" style="display:none;">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="cart-main container">
+        <div class="cart-hero">
+            <div>
+                <p class="cart-eyebrow">Your Bag</p>
+                <h1 class="cart-title">Shopping Cart <span id="cartItemCount">0 items</span></h1>
+                <p class="cart-subtitle">Review your pieces, update quantities, and head to checkout when you’re ready.</p>
+            </div>
+            <div class="cart-trust">
+                <i class="fas fa-lock"></i>
+                <div>
+                    <strong>Secure Checkout</strong>
+                    <div class="cart-subtitle">We protect every transaction.</div>
+                </div>
+            </div>
+        </div>
+        <div class="drawer-backdrop" data-drawer-backdrop="cart-summary"></div>
+        <div class="drawer-toolbar">
+            <button class="btn btn-outline drawer-toggle" type="button" data-drawer-toggle="cart-summary" aria-controls="cartSummary" aria-expanded="false">
+                <i class="fas fa-receipt"></i> Order Summary
+            </button>
+        </div>
+        <div class="cart-grid">
+            <div class="cart-card">
+                <h2>Items</h2>
+                <div id="cartItems"></div>
+                <div style="margin-top: var(--spacing-lg);">
+                    <a class="btn btn-outline" href="shop.html">Continue Shopping</a>
+                </div>
+            </div>
+            <div class="cart-card summary-card mobile-drawer drawer-right" id="cartSummary" data-drawer="cart-summary">
+                <div class="drawer-header">
+                    <h2 style="margin: 0;">Order Summary</h2>
+                    <button class="drawer-close" type="button" data-drawer-close="cart-summary" aria-label="Close summary">&times;</button>
+                </div>
+                <h2 class="drawer-title">Order Summary</h2>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="cartSubtotal">$0.00</span>
+                </div>
+                <div class="summary-row muted">
+                    <span>Estimated Tax</span>
+                    <span id="cartTax">$0.00</span>
+                </div>
+                <div class="summary-row muted">
+                    <span>Shipping</span>
+                    <span id="cartShipping">Calculated at checkout</span>
+                </div>
+                <div class="summary-total">
+                    <span>Estimated Total</span>
+                    <span id="cartTotal">$0.00</span>
+                </div>
+                <div class="promo-row">
+                    <input type="text" id="promoInput" placeholder="Promo code">
+                    <button class="btn btn-outline" id="promoApplyBtn">Apply</button>
+                </div>
+                <div class="promo-note" id="promoNote">Promotions are validated at checkout.</div>
+                <div style="margin-top: var(--spacing-lg);">
+                    <a class="btn btn-primary" data-checkout href="checkout.html" style="width:100%;" onclick="if(window.startCheckout){startCheckout(); return false;}">Checkout</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="margin-top: var(--spacing-2xl);">
+        <div class="footer-content container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 CORRIESELLS. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+    <script>
+        const TAX_RATE = 0.08;
+
+        function formatCurrency(value) {
+            const num = Number(value) || 0;
+            return `$${num.toFixed(2)}`;
+        }
+
+        function renderCartPage() {
+            const itemsEl = document.getElementById('cartItems');
+            const subtotalEl = document.getElementById('cartSubtotal');
+            const taxEl = document.getElementById('cartTax');
+            const totalEl = document.getElementById('cartTotal');
+            const countEl = document.getElementById('cartItemCount');
+            const cart = window.getCart ? window.getCart() : [];
+
+            if (!cart.length) {
+                itemsEl.innerHTML = `
+                    <div class="cart-empty">
+                        <i class="fas fa-shopping-bag"></i>
+                        <h3 style="margin:0 0 var(--spacing-sm);">Your cart is empty</h3>
+                        <p style="margin:0 0 var(--spacing-md);">Explore the latest drops and build your look.</p>
+                        <a class="btn btn-primary" href="shop.html">Shop Best Sellers</a>
+                    </div>
+                `;
+                subtotalEl.textContent = '$0.00';
+                taxEl.textContent = '$0.00';
+                totalEl.textContent = '$0.00';
+                if (countEl) countEl.textContent = '0 items';
+                return;
+            }
+
+            const itemCount = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+            if (countEl) countEl.textContent = `${itemCount} item${itemCount === 1 ? '' : 's'}`;
+
+            itemsEl.innerHTML = cart.map((item) => {
+                const lineTotal = (item.price || 0) * (item.quantity || 1);
+                const optionLabel = item.options && (item.options.size || item.options.color)
+                    ? [item.options.size && `Size: ${item.options.size}`, item.options.color && `Color: ${item.options.color}`].filter(Boolean).join(' · ')
+                    : 'Standard';
+                return `
+                    <div class="cart-item-row">
+                        <div>
+                            ${item.image ? `<img src="${item.image}" alt="">` : ''}
+                        </div>
+                        <div>
+                            <div class="cart-item-title">${item.name || 'Item'}</div>
+                            <div class="cart-item-meta">${optionLabel}</div>
+                            <div class="cart-item-meta">${formatCurrency(item.price || 0)}</div>
+                            <div class="qty-control">
+                                <button class="btn btn-outline btn-sm" data-action="decr" data-id="${item.lineId || item.id}">−</button>
+                                <input type="number" min="1" value="${item.quantity || 1}" data-action="qty" data-id="${item.lineId || item.id}">
+                                <button class="btn btn-outline btn-sm" data-action="incr" data-id="${item.lineId || item.id}">+</button>
+                                <button class="btn btn-link" data-action="remove" data-id="${item.lineId || item.id}">Remove</button>
+                            </div>
+                        </div>
+                        <div style="font-weight:600;">${formatCurrency(lineTotal)}</div>
+                    </div>
+                `;
+            }).join('');
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0);
+            const tax = subtotal * TAX_RATE;
+            subtotalEl.textContent = formatCurrency(subtotal);
+            if (taxEl) taxEl.textContent = formatCurrency(tax);
+            totalEl.textContent = formatCurrency(subtotal + tax);
+        }
+
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-action]');
+            if (!btn) return;
+            const action = btn.dataset.action;
+            const id = btn.dataset.id;
+            if (!id || !window.getCart) return;
+
+            const cart = window.getCart();
+            const item = cart.find(i => (i.lineId || i.id) === id);
+            if (!item) return;
+
+            if (action === 'remove') {
+                window.removeFromCart(id);
+            } else if (action === 'incr') {
+                window.updateCartItem(id, (item.quantity || 1) + 1);
+            } else if (action === 'decr') {
+                window.updateCartItem(id, Math.max(1, (item.quantity || 1) - 1));
+            }
+            renderCartPage();
+        });
+
+        document.addEventListener('input', (e) => {
+            const input = e.target.closest('[data-action="qty"]');
+            if (!input || !window.updateCartItem) return;
+            const id = input.dataset.id;
+            const next = Math.max(1, parseInt(input.value || '1', 10));
+            window.updateCartItem(id, next);
+            renderCartPage();
+        });
+
+        window.addEventListener('DOMContentLoaded', renderCartPage);
+        window.addEventListener('pageshow', renderCartPage);
+
+        const promoBtn = document.getElementById('promoApplyBtn');
+        if (promoBtn) {
+            promoBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const note = document.getElementById('promoNote');
+                if (note) note.textContent = 'Promo code will be verified at checkout.';
+            });
+        }
+    </script>
+</body>
+</html>
+

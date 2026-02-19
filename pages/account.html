@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - CORRIESELLS</title>
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/pro.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-wrapper">
+            <div class="container">
+                <div class="header-container">
+                    <div class="logo">
+                        <a href="../index.html">
+                            <img src="../assets/images/logo.png" alt="CORRIESELLS Logo" class="logo-image">
+                            <span>CORRIESELLS</span>
+                        </a>
+                    </div>
+
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search products...">
+                    </div>
+
+                    <nav>
+                        <ul>
+                            <li><a href="../index.html">Home</a></li>
+                            <li><a href="shop.html">Shop</a></li>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                            <li class="nav-desktop-only"><a href="wishlist.html"><i class="far fa-heart"></i> Wishlist</a></li>
+                        </ul>
+                    </nav>
+
+                    <div class="header-icons">
+                        <button class="icon-btn account-btn" onclick="window.location.href='account.html'" aria-label="Account">
+                            <img class="account-avatar-image" alt="" loading="lazy">
+                            <i class="fas fa-user account-avatar-icon" aria-hidden="true"></i>
+                        </button>
+                        <button class="cart-icon icon-btn">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="badge" style="display: none;">0</span>
+                        </button>
+                        <div class="mobile-menu-toggle">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    
+    <script>
+        const ACCOUNT_STORAGE_USER = 'corriesells_user';
+        const STORAGE_USERS = 'corriesells_users';
+        const STORAGE_WISHLIST = 'corriesells_wishlist';
+        const STORAGE_ORDERS = 'corriesells_orders';
+        const STORAGE_ADDRESSES = 'corriesells_addresses';
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            let user = readJson(ACCOUNT_STORAGE_USER, null);
+
+            if (window.CorrieAuth && typeof window.CorrieAuth.getMe === 'function') {
+                const apiUser = await window.CorrieAuth.getMe().catch(() => null);
+                if (apiUser) {
+                    user = apiUser;
+                } else if (window.CorrieAuth.hasToken && window.CorrieAuth.hasToken()) {
+                    window.CorrieAuth.clearSession();
+                }
+            }
+
+            if (!user) {
+                window.location.href = 'login.html?redirect=account.html';
+                return;
+            }
+            loadUserProfile();
+            initProfilePhotoControls();
+            const settingsForm = document.getElementById('settingsForm');
+            if (settingsForm) {
+                settingsForm.addEventListener('submit', saveUserProfile);
+            }
+            const passwordForm = document.getElementById('passwordForm');
+            if (passwordForm) {
+                passwordForm.addEventListener('submit', saveUserPassword);
+            }
+            const addressForm = document.getElementById('addressForm');
+            if (addressForm) {
+                addressForm.addEventListener('submit', handleAddressSubmit);
+            }
+        });
+
+        function readJson(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch (error) {
+                return fallback;
+            }
+        }
+
+        function writeJson(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function normalizeEmail(value) {
+            return (value || '').trim().toLowerCase();
+        }
+
+        function simpleHash(value) {
+            let hash = 5381;
+            for (let i = 0; i < value.length; i++) {
+                hash = ((hash << 5) + hash) + value.charCodeAt(i);
+            }
+            return `h${(hash >>> 0).toString(16)}`;
+        }
+
+        function isPasswordStrong(password) {
+            return /[A-Z]/.test(password) && /[a-z]/.test(password) && /\\d/.test(password) && (password || '').length >= 8;
+        }
+
+        function formatCurrency(value) {
+            const amount = Number(value) || 0;
+            return `$${amount.toFixed(2)}`;
+        }
+
+        function formatDate(value) {
+            if (!value) return '';
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return '';
+            return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        function getInitials(firstName, lastName, email) {
+            const initials = [firstName, lastName]
+                .filter(Boolean)
+                .map((part) => part.trim()[0])
+                .join('')
+                .toUpperCase();
+            if (initials) return initials;
+            if (email) return email.trim()[0].toUpperCase();
+            return '👤';
+        }
+
+        function getAvatarUrl(user) {
+            return user && (user.avatarUrl || user.avatar || user.photoUrl) ? (user.avatarUrl || user.avatar || user.photoUrl) : '';
+        }
+
+        function syncUserAvatarFromRecords(user) {
+            if (!user) return user;
+            const usersList = readJson(STORAGE_USERS, []);
+            const storedUsers = Array.isArray(usersList) ? usersList : [];
+            if (!storedUsers.length) return user;
+
+            const email = normalizeEmail(user.email);
+            const recordIndex = storedUsers.findIndex((entry) => {
+                if (!entry) return false;
+                if (user.id && entry.id && entry.id === user.id) return true;
+                if (email && entry.email) return normalizeEmail(entry.email) === email;
+                return false;
+            });
+            if (recordIndex < 0) return user;
+
+            const record = storedUsers[recordIndex];
+            const recordAvatar = record && (record.avatarUrl || record.avatar || record.photoUrl);
+            const userAvatar = user.avatarUrl || user.avatar || user.photoUrl;
+
+            if (recordAvatar && !userAvatar) {
+                const nextUser = { ...user, avatarUrl: recordAvatar };
+                try {
+                    writeJson(ACCOUNT_STORAGE_USER, nextUser);
+                } catch (e) {}
+                return nextUser;
+            }
+
+            if (userAvatar && userAvatar !== recordAvatar) {
+                storedUsers[recordIndex] = { ...record, avatarUrl: userAvatar };
+                try {
+                    writeJson(STORAGE_USERS, storedUsers);
+                } catch (e) {}
+            }
+
+            return user;
+        }
+
+        function updateAvatarDisplays(user) {
+            const initials = getInitials(user?.firstName, user?.lastName, user?.email);
+            const avatarUrl = getAvatarUrl(user);
+            const targets = [
+                {
+                    wrap: document.getElementById('sidebarAvatar'),
+                    img: document.getElementById('userAvatarImage'),
+                    initials: document.getElementById('userAvatar')
+                },
+                {
+                    wrap: document.getElementById('dashboardAvatar'),
+                    img: document.getElementById('profileAvatarImage'),
+                    initials: document.getElementById('profileAvatar')
+                }
+            ];
+
+            targets.forEach((target) => {
+                if (!target.wrap && !target.img && !target.initials) return;
+                if (avatarUrl) {
+                    if (target.wrap) target.wrap.classList.add('has-image');
+                    if (target.img) {
+                        target.img.src = avatarUrl;
+                        target.img.alt = 'Profile photo';
+                    }
+                    if (target.initials) target.initials.textContent = '';
+                } else {
+                    if (target.wrap) target.wrap.classList.remove('has-image');
+                    if (target.img) {
+                        target.img.removeAttribute('src');
+                        target.img.alt = '';
+                    }
+                    if (target.initials) target.initials.textContent = initials;
+                }
+            });
+
+            const removeBtn = document.getElementById('profilePhotoRemove');
+            if (removeBtn) removeBtn.style.display = avatarUrl ? 'inline-flex' : 'none';
+        }
+
+        function initProfilePhotoControls() {
+            const input = document.getElementById('profilePhotoInput');
+            const uploadBtn = document.getElementById('profilePhotoBtn');
+            const removeBtn = document.getElementById('profilePhotoRemove');
+
+            if (uploadBtn && input) {
+                uploadBtn.addEventListener('click', () => input.click());
+            }
+            if (input) {
+                input.addEventListener('change', handleProfilePhotoChange);
+            }
+            if (removeBtn) {
+                removeBtn.addEventListener('click', removeUserAvatar);
+            }
+        }
+
+        function handleProfilePhotoChange(event) {
+            const input = event?.target;
+            const file = input?.files && input.files[0] ? input.files[0] : null;
+            if (!file) return;
+
+            if (!file.type || !file.type.startsWith('image/')) {
+                showNotification('Please select an image file.', 'error');
+                if (input) input.value = '';
+                return;
+            }
+
+            const maxBytes = 2 * 1024 * 1024;
+            if (file.size > maxBytes) {
+                showNotification('Please choose an image under 2MB.', 'error');
+                if (input) input.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                const dataUrl = typeof reader.result === 'string' ? reader.result : '';
+                if (!dataUrl) {
+                    showNotification('Could not read that file.', 'error');
+                    return;
+                }
+                saveUserAvatar(dataUrl);
+                if (input) input.value = '';
+            };
+            reader.onerror = () => {
+                showNotification('Could not read that file.', 'error');
+                if (input) input.value = '';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function upsertUserRecord(user, usersList, previousEmail) {
+            const list = Array.isArray(usersList) ? usersList : [];
+            const matchEmail = normalizeEmail(previousEmail || user?.email || '');
+            const idx = list.findIndex((entry) => entry.id === user.id || normalizeEmail(entry.email) === matchEmail);
+            const record = {
+                id: user.id,
+                firstName: user.firstName || null,
+                lastName: user.lastName || null,
+                email: user.email || null,
+                phone: user.phone || null,
+                username: user.username || null,
+                createdAt: user.createdAt,
+                avatarUrl: user.avatarUrl || null
+            };
+            if (idx > -1) {
+                list[idx] = { ...list[idx], ...record };
+            } else {
+                list.push(record);
+            }
+            localStorage.setItem(STORAGE_USERS, JSON.stringify(list));
+            return list;
+        }
+
+        function saveUserAvatar(dataUrl) {
+            const user = readJson(ACCOUNT_STORAGE_USER, null);
+            if (!user) return;
+            user.avatarUrl = dataUrl;
+            localStorage.setItem(ACCOUNT_STORAGE_USER, JSON.stringify(user));
+            if (typeof window.setWindowNameData === 'function') {
+                window.setWindowNameData({ corriesells_user: user });
+            }
+
+            const usersList = readJson(STORAGE_USERS, []);
+            upsertUserRecord(user, usersList, user.email);
+
+            updateAvatarDisplays(user);
+            if (typeof window.updateHeaderAvatar === 'function') {
+                window.updateHeaderAvatar(user);
+            }
+            showNotification('Profile photo updated.', 'success');
+        }
+
+        function removeUserAvatar() {
+            const user = readJson(ACCOUNT_STORAGE_USER, null);
+            if (!user) return;
+            if (user.avatarUrl) delete user.avatarUrl;
+            if (user.avatar) delete user.avatar;
+            if (user.photoUrl) delete user.photoUrl;
+            localStorage.setItem(ACCOUNT_STORAGE_USER, JSON.stringify(user));
+            if (typeof window.setWindowNameData === 'function') {
+                window.setWindowNameData({ corriesells_user: user });
+            }
+
+            const usersList = readJson(STORAGE_USERS, []);
+            upsertUserRecord(user, usersList, user.email);
+
+            updateAvatarDisplays(user);
+            if (typeof window.updateHeaderAvatar === 'function') {
+                window.updateHeaderAvatar(user);
+            }
+            showNotification('Profile photo removed.', 'success');
+        }
+
+        function buildUsername(firstName, lastName, email) {
+            const clean = (value) => (value || '').toString().trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
+            const first = clean(firstName);
+            const last = clean(lastName);
+            if (first || last) return `${first}${last}`;
+            if (email) return clean(email.split('@')[0]);
+            return 'member';
+        }
+
+        function getUserOrders(user) {
+            const orders = readJson(STORAGE_ORDERS, []);
+            if (!Array.isArray(orders)) return [];
+            const userId = user && user.id ? user.id : null;
+            const userEmail = user && user.email ? normalizeEmail(user.email) : null;
+            return orders.filter((order) => {
+                if (!order) return false;
+                if (userId && order.userId && order.userId === userId) return true;
+                if (userEmail && order.email && normalizeEmail(order.email) === userEmail) return true;
+                return false;
+            });
+        }
+
+        function getUserAddresses(user) {
+            const addresses = readJson(STORAGE_ADDRESSES, []);
+            if (!Array.isArray(addresses)) return [];
+            const userId = user && user.id ? user.id : null;
+            const userEmail = user && user.email ? normalizeEmail(user.email) : null;
+            return addresses.filter((address) => {
+                if (!address) return false;
+                if (userId && address.userId && address.userId === userId) return true;
+                if (userEmail && address.email && normalizeEmail(address.email) === userEmail) return true;
+                return false;
+            });
+        }
+
+        function saveAddresses(addresses) {
+            writeJson(STORAGE_ADDRESSES, addresses);
+        }
+
+        function buildAddressId() {
+            return `addr_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
+        }
+
+        function loadUserProfile() {
+            let user = readJson(ACCOUNT_STORAGE_USER, null);
+            if (!user) return;
+            user = syncUserAvatarFromRecords(user);
+
+            const fullName = [user.firstName, user.lastName].filter(Boolean).join(' ').trim();
+            const fallbackName = user.email ? user.email.split('@')[0] : 'Member';
+            const displayName = fullName || fallbackName || 'Member';
+            const usernameRaw = buildUsername(user.firstName, user.lastName, user.email);
+            const username = user.username || `@${usernameRaw}`;
+            const memberSince = user.createdAt ? `Member since ${formatDate(user.createdAt)}` : 'Member';
+            const lastLogin = user.loginTime ? `Last login ${formatDate(user.loginTime)}` : '';
+
+            const nameEl = document.getElementById('userName');
+            if (nameEl) nameEl.textContent = displayName;
+            const welcomeEl = document.getElementById('welcomeName');
+            if (welcomeEl) welcomeEl.textContent = displayName;
+            const handleEl = document.getElementById('userHandle');
+            if (handleEl) handleEl.textContent = username;
+            const welcomeHandleEl = document.getElementById('welcomeUsername');
+            if (welcomeHandleEl) welcomeHandleEl.textContent = username;
+            const emailEl = document.getElementById('userEmail');
+            if (emailEl) emailEl.textContent = user.email || '';
+            const sinceEl = document.getElementById('userSince');
+            if (sinceEl) sinceEl.textContent = memberSince;
+            const metaEl = document.getElementById('welcomeMeta');
+            if (metaEl) metaEl.textContent = lastLogin || 'Here is your account overview.';
+
+            const avatarEl = document.getElementById('userAvatar');
+            if (avatarEl) avatarEl.textContent = getInitials(user.firstName, user.lastName, user.email);
+
+            updateAvatarDisplays(user);
+            if (typeof window.updateHeaderAvatar === 'function') {
+                window.updateHeaderAvatar(user);
+            }
+
+            const firstNameInput = document.getElementById('firstNameInput');
+            if (firstNameInput) firstNameInput.value = user.firstName || '';
+            const lastNameInput = document.getElementById('lastNameInput');
+            if (lastNameInput) lastNameInput.value = user.lastName || '';
+            const emailInput = document.getElementById('emailInput');
+            if (emailInput) emailInput.value = user.email || '';
+            const phoneInput = document.getElementById('phoneInput');
+            if (phoneInput) phoneInput.value = user.phone || '';
+
+            updateAccountStats(user);
+            renderOrders(user);
+            renderAddresses(user);
+            prefillAddressForm(user);
+        }
+
+        function updateAccountStats(user) {
+            const orders = getUserOrders(user);
+            const wishlist = readJson(STORAGE_WISHLIST, []);
+            const wishlistCount = Array.isArray(wishlist) ? wishlist.length : 0;
+            const totalOrders = orders.length;
+            const totalSpent = orders.reduce((sum, order) => sum + (Number(order.total) || 0), 0);
+
+            const ordersEl = document.getElementById('statOrders');
+            if (ordersEl) ordersEl.textContent = totalOrders.toString();
+            const spentEl = document.getElementById('statSpent');
+            if (spentEl) spentEl.textContent = formatCurrency(totalSpent);
+            const wishEl = document.getElementById('statWishlist');
+            if (wishEl) wishEl.textContent = wishlistCount.toString();
+        }
+
+        function getStatusStyle(status) {
+            const label = (status || 'Processing').toString();
+            const token = label.toLowerCase();
+            let color = 'var(--primary-color)';
+            if (token.includes('deliver') || token.includes('complete')) color = 'var(--success)';
+            else if (token.includes('ship')) color = 'var(--warning)';
+            else if (token.includes('cancel') || token.includes('refund')) color = '#a33';
+            return { label, color };
+        }
+
+        function hashToDigits(value, length = 12) {
+            const str = String(value || '');
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
+            }
+            let output = String(hash);
+            while (output.length < length) {
+                hash = (hash * 33 + 7) >>> 0;
+                output += String(hash).padStart(10, '0');
+            }
+            return output.slice(0, length);
+        }
+
+        function getTrackingCarrier(order) {
+            const method = String(order?.shippingMethod || order?.shippingLabel || '').toLowerCase();
+            if (method.includes('express')) return 'FedEx';
+            if (method.includes('standard') || method.includes('free')) return 'UPS';
+            if (method.includes('international')) return 'DHL';
+            return 'UPS';
+        }
+
+        function buildTrackingNumber(order, index, carrier) {
+            const seed = `${carrier || 'CSE'}-${order?.id || order?.orderId || order?.number || ''}-${order?.createdAt || ''}-${index || 0}`;
+            const digits = hashToDigits(seed, 12);
+            const token = String(carrier || '').toLowerCase();
+            const prefix = token.includes('fedex') ? 'FDX' : token.includes('dhl') ? 'DHL' : '1Z';
+            return `${prefix}${digits}`;
+        }
+
+        function buildTrackingUrl(carrier, number) {
+            const code = encodeURIComponent(number || '');
+            if (!code) return '';
+            const token = String(carrier || '').toLowerCase();
+            if (token.includes('fedex')) return `https://www.fedex.com/fedextrack/?trknbr=${code}`;
+            if (token.includes('dhl')) return `https://www.dhl.com/en/express/tracking.html?AWB=${code}`;
+            return `https://www.ups.com/track?tracknum=${code}`;
+        }
+
+        function deriveTrackingStatus(order) {
+            const orderStatus = String(order?.status || '').toLowerCase();
+            if (orderStatus.includes('cancel') || orderStatus.includes('refund')) return 'Shipment canceled';
+            if (orderStatus.includes('deliver') || orderStatus.includes('complete')) return 'Delivered';
+            if (orderStatus.includes('ship')) return 'In transit';
+
+            const createdAt = new Date(order?.createdAt || order?.date || 0).getTime();
+            if (!Number.isFinite(createdAt) || createdAt <= 0) return 'Label created';
+            const days = (Date.now() - createdAt) / 86400000;
+            if (days < 0.5) return 'Label created';
+            if (days < 2) return 'In transit';
+            if (days < 4) return 'Out for delivery';
+            return 'Delivered';
+        }
+
+        function getTrackingStyle(status) {
+            const label = (status || 'Label created').toString();
+            const token = label.toLowerCase();
+            let color = 'var(--primary-color)';
+            if (token.includes('deliver')) color = 'var(--success)';
+            else if (token.includes('out for delivery') || token.includes('transit')) color = 'var(--warning)';
+            else if (token.includes('cancel') || token.includes('fail')) color = '#a33';
+            return { label, color };
+        }
+
+        function getTrackingMeta(order, index) {
+            if (!order) {
+                return {
+                    carrier: 'UPS',
+                    number: '',
+                    url: '',
+                    status: 'Label created',
+                    eta: ''
+                };
+            }
+            const carrier = order.trackingCarrier || (order.tracking && order.tracking.carrier) || getTrackingCarrier(order);
+            const number = order.trackingNumber || (order.tracking && order.tracking.number) || buildTrackingNumber(order, index, carrier);
+            const url = order.trackingUrl || (order.tracking && order.tracking.url) || buildTrackingUrl(carrier, number);
+            const status = order.trackingStatus || (order.tracking && order.tracking.status) || deriveTrackingStatus(order);
+            const eta = order.trackingEta || (order.tracking && order.tracking.eta) || order.shippingEta || '';
+            return { carrier, number, url, status, eta };
+        }
+
+        function showLogoutConfirmToast() {
+            const message = "Heading out? We'll keep everything ready for your next visit.";
+            return new Promise((resolve) => {
+                const root = document.body || document.documentElement;
+                if (!root) {
+                    resolve(false);
+                    return;
+                }
+
+                let stack = document.querySelector('.site-toast-stack');
+                if (!stack) {
+                    stack = document.createElement('div');
+                    stack.className = 'site-toast-stack';
+                    stack.setAttribute('aria-live', 'polite');
+                    stack.setAttribute('aria-atomic', 'false');
+                    root.appendChild(stack);
+                }
+
+                stack.querySelectorAll('[data-toast="logout-confirm"]').forEach((node) => node.remove());
+
+                const toast = document.createElement('div');
+                toast.className = 'alert alert-warning site-toast';
+                toast.setAttribute('role', 'status');
+                toast.dataset.state = 'enter';
+                toast.dataset.toast = 'logout-confirm';
+
+                const iconWrap = document.createElement('span');
+                iconWrap.className = 'site-toast-icon';
+                const icon = document.createElement('i');
+                icon.className = 'fas fa-circle-exclamation';
+                icon.setAttribute('aria-hidden', 'true');
+                iconWrap.appendChild(icon);
+
+                const messageEl = document.createElement('div');
+                messageEl.className = 'site-toast-message';
+                messageEl.textContent = message;
+
+                const actions = document.createElement('div');
+                actions.style.display = 'flex';
+                actions.style.gap = '8px';
+                actions.style.marginTop = '8px';
+                actions.style.flexWrap = 'wrap';
+
+                const cancelBtn = document.createElement('button');
+                cancelBtn.className = 'btn btn-outline btn-sm';
+                cancelBtn.type = 'button';
+                cancelBtn.textContent = 'Stay signed in';
+
+                const confirmBtn = document.createElement('button');
+                confirmBtn.className = 'btn btn-primary btn-sm';
+                confirmBtn.type = 'button';
+                confirmBtn.textContent = 'Sign out';
+
+                actions.appendChild(cancelBtn);
+                actions.appendChild(confirmBtn);
+                messageEl.appendChild(actions);
+
+                const closeBtn = document.createElement('button');
+                closeBtn.className = 'site-toast-close';
+                closeBtn.type = 'button';
+                closeBtn.setAttribute('aria-label', 'Dismiss');
+                closeBtn.innerHTML = '<i class="fas fa-times" aria-hidden="true"></i>';
+
+                toast.appendChild(iconWrap);
+                toast.appendChild(messageEl);
+                toast.appendChild(closeBtn);
+                stack.appendChild(toast);
+
+                requestAnimationFrame(() => {
+                    toast.dataset.state = 'open';
+                });
+
+                let resolved = false;
+                const finalize = (result) => {
+                    if (resolved) return;
+                    resolved = true;
+                    toast.dataset.state = 'closing';
+                    setTimeout(() => {
+                        if (toast.parentElement) toast.parentElement.removeChild(toast);
+                        if (stack && stack.childElementCount === 0) stack.remove();
+                    }, 240);
+                    resolve(result);
+                };
+
+                confirmBtn.addEventListener('click', () => finalize(true));
+                cancelBtn.addEventListener('click', () => finalize(false));
+                closeBtn.addEventListener('click', () => finalize(false));
+            });
+        }
+
+        function notifyCopy(message, type) {
+            if (typeof window.showNotification === 'function') {
+                window.showNotification(message, type || 'info');
+            } else if (message) {
+                alert(message);
+            }
+        }
+
+        function fallbackCopyText(text) {
+            const input = document.createElement('input');
+            input.value = text;
+            document.body.appendChild(input);
+            input.select();
+            try {
+                document.execCommand('copy');
+                notifyCopy('Tracking number copied.', 'success');
+            } catch (e) {
+                notifyCopy('Unable to copy tracking number.', 'error');
+            }
+            document.body.removeChild(input);
+        }
+
+        function copyTrackingNumber(value) {
+            const text = String(value || '').trim();
+            if (!text) return;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text)
+                    .then(() => notifyCopy('Tracking number copied.', 'success'))
+                    .catch(() => fallbackCopyText(text));
+                return;
+            }
+            fallbackCopyText(text);
+        }
+
+        function renderTrackingOverview(orders) {
+            const listEl = document.getElementById('trackingList');
+            if (!listEl) return;
+            const safeOrders = Array.isArray(orders) ? orders : [];
+
+            if (!safeOrders.length) {
+                listEl.innerHTML = '<div style="color: var(--pro-muted);">No shipments yet. Place an order to see tracking here.</div>';
+                return;
+            }
+
+            const recent = safeOrders.slice(0, 3);
+            listEl.innerHTML = recent.map((order, index) => {
+                const orderId = order.id || order.orderId || order.number || `ORD-${String(index + 1).padStart(3, '0')}`;
+                const tracking = getTrackingMeta(order, index);
+                const trackingStyle = getTrackingStyle(tracking.status);
+                const trackingLine = tracking.number ? `${tracking.carrier} ${tracking.number}` : 'Tracking not assigned';
+                const eta = tracking.eta || 'Pending';
+                const shippingMethod = order.shippingLabel || 'Standard delivery';
+                const destinationParts = [
+                    order.shippingAddress?.city,
+                    order.shippingAddress?.state,
+                    order.shippingAddress?.country
+                ].filter(Boolean);
+                const destination = destinationParts.length ? destinationParts.join(', ') : 'Shipping destination';
+                const trackButton = tracking.url
+                    ? `<a class="btn btn-primary btn-sm" href="${tracking.url}" target="_blank" rel="noopener">Track package</a>`
+                    : `<button class="btn btn-primary btn-sm" type="button" disabled>Track package</button>`;
+                const copyButton = tracking.number
+                    ? `<button class="btn btn-outline btn-sm" type="button" data-copy-tracking="${tracking.number}">Copy tracking</button>`
+                    : `<button class="btn btn-outline btn-sm" type="button" disabled>Copy tracking</button>`;
+
+                return `
+                    <div class="tracking-card">
+                        <div class="tracking-card-header">
+                            <div>
+                                <div style="font-weight: 600;">Order ${orderId}</div>
+                                <div class="tracking-meta">${trackingLine}</div>
+                            </div>
+                            <span class="tracking-status" style="background-color: ${trackingStyle.color};">${trackingStyle.label}</span>
+                        </div>
+                        <div class="tracking-lines">
+                            <div class="tracking-line"><span>ETA</span><strong>${eta}</strong></div>
+                            <div class="tracking-line"><span>Shipping method</span><strong>${shippingMethod}</strong></div>
+                            <div class="tracking-line"><span>Destination</span><strong>${destination}</strong></div>
+                        </div>
+                        <div class="tracking-card-actions">
+                            ${trackButton}
+                            ${copyButton}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            listEl.querySelectorAll('[data-copy-tracking]').forEach((button) => {
+                button.addEventListener('click', () => copyTrackingNumber(button.dataset.copyTracking));
+            });
+        }
+
+        function renderOrders(user) {
+            const tbody = document.getElementById('ordersTableBody');
+            if (!tbody) return;
+
+            const orders = getUserOrders(user).sort((a, b) => {
+                const aTime = new Date(a.createdAt || a.date || 0).getTime();
+                const bTime = new Date(b.createdAt || b.date || 0).getTime();
+                return bTime - aTime;
+            });
+
+            tbody.innerHTML = '';
+
+            renderTrackingOverview(orders);
+
+            if (!orders.length) {
+                tbody.innerHTML = '<tr><td colspan="6" style="padding: var(--spacing-lg); color: var(--text-muted); text-align: center;">No orders yet. When you place an order it will show up here.</td></tr>';
+                return;
+            }
+
+            orders.forEach((order, index) => {
+                const orderId = order.id || order.orderId || order.number || `#ORD-${String(index + 1).padStart(3, '0')}`;
+                const date = formatDate(order.createdAt || order.date) || '—';
+                const total = formatCurrency(order.total || 0);
+                const statusMeta = getStatusStyle(order.status);
+                const viewLink = order.viewUrl || '#';
+                const tracking = getTrackingMeta(order, index);
+                const trackingMeta = getTrackingStyle(tracking.status);
+                const trackingEta = tracking.eta ? `<span style="color: var(--text-muted); font-size: 0.85rem;">ETA: ${tracking.eta}</span>` : '';
+                const trackingNumber = tracking.number
+                    ? `<span style="color: var(--text-muted); font-size: 0.85rem;">${tracking.carrier} ${tracking.number}</span>`
+                    : `<span style="color: var(--text-muted); font-size: 0.85rem;">Tracking not assigned</span>`;
+                const trackingAction = tracking.url
+                    ? `<a href="${tracking.url}" class="btn btn-sm btn-outline" target="_blank" rel="noopener">Track</a>`
+                    : `<button class="btn btn-sm btn-outline" type="button" disabled>Track</button>`;
+
+                const row = `
+                    <tr style="border-bottom: var(--border-light);">
+                        <td style="padding: var(--spacing-md);">${orderId}</td>
+                        <td style="padding: var(--spacing-md);">${date}</td>
+                        <td style="padding: var(--spacing-md);"><span style="background-color: ${statusMeta.color}; color: white; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); font-size: 0.85rem;">${statusMeta.label}</span></td>
+                        <td style="padding: var(--spacing-md); white-space: normal;">
+                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                <span style="background-color: ${trackingMeta.color}; color: white; padding: 0.2rem 0.6rem; border-radius: var(--radius-full); font-size: 0.8rem; width: fit-content;">${trackingMeta.label}</span>
+                                ${trackingEta}
+                                ${trackingNumber}
+                                ${trackingAction}
+                            </div>
+                        </td>
+                        <td style="padding: var(--spacing-md);">${total}</td>
+                        <td style="padding: var(--spacing-md);"><a href="${viewLink}" class="btn btn-sm btn-outline">View</a></td>
+                    </tr>
+                `;
+                tbody.insertAdjacentHTML('beforeend', row);
+            });
+        }
+
+        function renderAddresses(user) {
+            const listEl = document.getElementById('addressList');
+            if (!listEl) return;
+            const addresses = getUserAddresses(user);
+            if (!addresses.length) {
+                listEl.innerHTML = '<p style="color: var(--text-muted);">No saved addresses yet.</p>';
+                return;
+            }
+
+            listEl.innerHTML = addresses.map((address) => {
+                const name = [address.firstName, address.lastName].filter(Boolean).join(' ').trim();
+                const line2 = address.line2 ? `<div>${address.line2}</div>` : '';
+                const label = address.label ? `<span style="background: var(--bg-secondary); padding: 0.2rem 0.6rem; border-radius: var(--radius-full); font-size: 0.75rem; margin-left: var(--spacing-sm);">${address.label}</span>` : '';
+                const defaultTag = address.isDefault ? '<span style="background: var(--success); color: #fff; padding: 0.2rem 0.6rem; border-radius: var(--radius-full); font-size: 0.75rem; margin-left: var(--spacing-sm);">Default</span>' : '';
+                return `
+                    <div style="border: var(--border-light); border-radius: var(--radius-md); padding: var(--spacing-md); margin-bottom: var(--spacing-md);">
+                        <div style="display:flex; justify-content: space-between; gap: var(--spacing-md); flex-wrap: wrap;">
+                            <div>
+                                <strong>${name || 'Address'}</strong>${label}${defaultTag}
+                                <div style="color: var(--text-muted);">${address.phone || ''}</div>
+                                <div>${address.line1}</div>
+                                ${line2}
+                                <div>${address.city}, ${address.state} ${address.postal}</div>
+                                <div>${address.country}</div>
+                            </div>
+                            <div style="display:flex; gap: var(--spacing-sm); align-items: flex-start;">
+                                ${address.isDefault ? '' : `<button class="btn btn-sm btn-outline" onclick="setDefaultAddress('${address.id}')">Make Default</button>`}
+                                <button class="btn btn-sm btn-outline" onclick="removeAddress('${address.id}')">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function prefillAddressForm(user) {
+            const form = document.getElementById('addressForm');
+            if (!form) return;
+            const fields = ['addressFirstName','addressLastName','addressPhone','addressLine1','addressLine2','addressCity','addressState','addressPostal','addressCountry','addressLabel'];
+            const hasValues = fields.some((id) => (document.getElementById(id)?.value || '').trim().length > 0);
+            if (hasValues) return;
+
+            const addresses = getUserAddresses(user);
+            if (!addresses.length) return;
+            const preferred = addresses.find((addr) => addr.isDefault) || addresses[0];
+
+            if (!preferred) return;
+            const set = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.value = value || '';
+            };
+
+            set('addressFirstName', preferred.firstName);
+            set('addressLastName', preferred.lastName);
+            set('addressPhone', preferred.phone);
+            set('addressLine1', preferred.line1);
+            set('addressLine2', preferred.line2);
+            set('addressCity', preferred.city);
+            set('addressState', preferred.state);
+            set('addressPostal', preferred.postal);
+            set('addressCountry', preferred.country);
+            set('addressLabel', preferred.label);
+            const defaultBox = document.getElementById('addressDefault');
+            if (defaultBox) defaultBox.checked = !!preferred.isDefault;
+        }
+
+        async function logoutUser() {
+            let shouldLogout = false;
+            if (typeof showLogoutConfirmToast === 'function') {
+                shouldLogout = await showLogoutConfirmToast();
+            } else if (typeof window.showConfirmDialog === 'function') {
+                shouldLogout = await window.showConfirmDialog({
+                    title: 'Sign Out',
+                    message: "Heading out? We'll keep everything ready for your next visit.",
+                    confirmText: 'Yes, Sign Out',
+                    cancelText: 'Cancel',
+                    tone: 'warning'
+                });
+            } else {
+                shouldLogout = window.confirm("Heading out? We'll keep everything ready for your next visit.");
+            }
+
+            if (!shouldLogout) return;
+            if (window.CorrieAuth && typeof window.CorrieAuth.logout === 'function') {
+                await window.CorrieAuth.logout();
+            } else {
+                localStorage.removeItem(ACCOUNT_STORAGE_USER);
+                localStorage.removeItem('corriesells_remember');
+            }
+            window.location.href = 'login.html';
+        }
+
+        function saveUserProfile(event) {
+            event.preventDefault();
+            const user = readJson(ACCOUNT_STORAGE_USER, null);
+            if (!user) return;
+
+            const firstName = (document.getElementById('firstNameInput')?.value || '').trim();
+            const lastName = (document.getElementById('lastNameInput')?.value || '').trim();
+            const email = normalizeEmail(document.getElementById('emailInput')?.value || '');
+            const phone = (document.getElementById('phoneInput')?.value || '').trim();
+
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showNotification('Please enter a valid email address.', 'error');
+                return;
+            }
+
+            const storedUsers = readJson(STORAGE_USERS, []);
+            const usersList = Array.isArray(storedUsers) ? storedUsers : [];
+            const duplicate = usersList.find((entry) => normalizeEmail(entry.email) === email && entry.id !== user.id);
+            if (duplicate) {
+                showNotification('This email is already registered. Please use a different one.', 'error');
+                return;
+            }
+
+            const previousEmail = user.email;
+            user.firstName = firstName || null;
+            user.lastName = lastName || null;
+            user.email = email;
+            user.phone = phone || null;
+
+            if (!user.username) {
+                user.username = `@${buildUsername(user.firstName, user.lastName, user.email)}`;
+            }
+            localStorage.setItem(ACCOUNT_STORAGE_USER, JSON.stringify(user));
+
+            const idx = usersList.findIndex((entry) => entry.id === user.id || normalizeEmail(entry.email) === normalizeEmail(previousEmail));
+            if (idx > -1) {
+                usersList[idx] = {
+                    ...usersList[idx],
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    phone: user.phone,
+                    username: user.username
+                };
+            } else {
+                usersList.push({
+                    id: user.id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    phone: user.phone,
+                    username: user.username,
+                    createdAt: user.createdAt,
+                    avatarUrl: user.avatarUrl || null
+                });
+            }
+            localStorage.setItem(STORAGE_USERS, JSON.stringify(usersList));
+
+            showNotification('Profile updated successfully!', 'success');
+            loadUserProfile();
+        }
+
+        function handleAddressSubmit(event) {
+            event.preventDefault();
+            const user = readJson(ACCOUNT_STORAGE_USER, null);
+            if (!user) return;
+
+            const firstName = (document.getElementById('addressFirstName')?.value || '').trim();
+            const lastName = (document.getElementById('addressLastName')?.value || '').trim();
+            const phone = (document.getElementById('addressPhone')?.value || '').trim();
+            const line1 = (document.getElementById('addressLine1')?.value || '').trim();
+            const line2 = (document.getElementById('addressLine2')?.value || '').trim();
+            const city = (document.getElementById('addressCity')?.value || '').trim();
+            const state = (document.getElementById('addressState')?.value || '').trim();
+            const postal = (document.getElementById('addressPostal')?.value || '').trim();
+            const country = (document.getElementById('addressCountry')?.value || '').trim();
+            const label = (document.getElementById('addressLabel')?.value || '').trim();
+            const makeDefault = !!document.getElementById('addressDefault')?.checked;
+
+            if (!firstName || !lastName || !line1 || !city || !state || !postal || !country) {
+                showNotification('Please complete all required address fields.', 'error');
+                return;
+            }
+
+            const allAddresses = readJson(STORAGE_ADDRESSES, []);
+            const addresses = Array.isArray(allAddresses) ? allAddresses : [];
+            if (makeDefault) {
+                addresses.forEach((address) => {
+                    if (address.userId === user.id) {
+                        address.isDefault = false;
+                    }
+                });
+            }
+
+            addresses.unshift({
+                id: buildAddressId(),
+                userId: user.id || null,
+                email: user.email || null,
+                firstName,
+                lastName,
+                phone,
+                line1,
+                line2,
+                city,
+                state,
+                postal,
+                country,
+                label,
+                isDefault: makeDefault,
+                createdAt: new Date().toISOString()
+            });
+
+            saveAddresses(addresses);
+            const form = document.getElementById('addressForm');
+            if (form) form.reset();
+            showNotification('Address saved.', 'success');
+            renderAddresses(user);
+        }
+
+        function setDefaultAddress(addressId) {
+            const user = readJson(ACCOUNT_STORAGE_USER, null);
+            if (!user) return;
+            const allAddresses = readJson(STORAGE_ADDRESSES, []);
+            const addresses = Array.isArray(allAddresses) ? allAddresses : [];
+            addresses.forEach((address) => {
+                if (address.userId !== user.id) return;
+                address.isDefault = address.id === addressId;
+            });
+            saveAddresses(addresses);
+            renderAddresses(user);
+        }
+
+        function removeAddress(addressId) {
+            const user = readJson(ACCOUNT_STORAGE_USER, null);
+            if (!user) return;
+            const allAddresses = readJson(STORAGE_ADDRESSES, []);
+            let addresses = Array.isArray(allAddresses) ? allAddresses : [];
+            addresses = addresses.filter((address) => address.id !== addressId);
+            saveAddresses(addresses);
+            renderAddresses(user);
+        }
+
+        function saveUserPassword(event) {
+            event.preventDefault();
+            const user = readJson(ACCOUNT_STORAGE_USER, null);
+            if (!user) return;
+
+            const currentPassword = document.getElementById('currentPassword')?.value || '';
+            const newPassword = document.getElementById('newPassword')?.value || '';
+            const confirmPassword = document.getElementById('confirmNewPassword')?.value || '';
+
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                showNotification('Please complete all password fields.', 'error');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showNotification('New passwords do not match.', 'error');
+                return;
+            }
+
+            if (!isPasswordStrong(newPassword)) {
+                showNotification('Use at least 8 characters, including uppercase, lowercase, and a number.', 'error');
+                return;
+            }
+
+            const usersList = readJson(STORAGE_USERS, []);
+            const storedUsers = Array.isArray(usersList) ? usersList : [];
+            const recordIndex = storedUsers.findIndex((entry) => entry.id === user.id || normalizeEmail(entry.email) === normalizeEmail(user.email));
+            const record = recordIndex > -1 ? storedUsers[recordIndex] : null;
+
+            const inputHash = simpleHash(currentPassword);
+            const storedHash = record && record.passwordHash ? record.passwordHash : user.passwordHash;
+            if (!storedHash || storedHash !== inputHash) {
+                showNotification('Current password is incorrect.', 'error');
+                return;
+            }
+
+            const nextHash = simpleHash(newPassword);
+            if (record) {
+                record.passwordHash = nextHash;
+                if (record.password) delete record.password;
+                storedUsers[recordIndex] = record;
+                localStorage.setItem(STORAGE_USERS, JSON.stringify(storedUsers));
+            }
+
+            user.passwordHash = nextHash;
+            localStorage.setItem(ACCOUNT_STORAGE_USER, JSON.stringify(user));
+
+            const form = document.getElementById('passwordForm');
+            if (form) form.reset();
+            showNotification('Password updated. Please sign in again.', 'success');
+            setTimeout(() => {
+                localStorage.removeItem(ACCOUNT_STORAGE_USER);
+                localStorage.removeItem('corriesells_remember');
+                window.location.href = 'login.html?redirect=account.html';
+            }, 1200);
+        }
+    </script>
+
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="modal-close cart-close">×</button>
+        </div>
+        <div class="cart-body">
+            <p class="text-center text-muted">Your cart is empty</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Subtotal:</span>
+                <span class="cart-total-amount">$0.00</span>
+            </div>
+            <div class="cart-actions">
+                <button class="btn btn-secondary" onclick="closeCart()">Continue Shopping</button>
+                <a class="btn btn-primary" data-checkout href="checkout.html" onclick="if(window.startCheckout){startCheckout(); return false;}">Checkout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Section -->
+    <section class="container account-page" style="padding: var(--spacing-2xl) var(--spacing-lg);">
+        <div class="drawer-backdrop" data-drawer-backdrop="account"></div>
+        <div class="drawer-toolbar account-toolbar">
+            <button class="btn btn-outline drawer-toggle" type="button" data-drawer-toggle="account" aria-controls="accountSidebar" aria-expanded="false">
+                <i class="fas fa-user"></i> Account Menu
+            </button>
+        </div>
+        <div class="sidebar-layout">
+            <!-- Sidebar -->
+            <aside class="account-sidebar mobile-drawer drawer-left" id="accountSidebar" data-drawer="account" style="background-color: var(--bg-secondary); padding: var(--spacing-lg);">
+                <div class="drawer-header">
+                    <h3 style="margin: 0;">Account</h3>
+                    <button class="drawer-close" type="button" data-drawer-close="account" aria-label="Close menu">&times;</button>
+                </div>
+                <div class="account-profile">
+                    <div class="account-avatar" id="sidebarAvatar">
+                        <img id="userAvatarImage" alt="Profile photo" loading="lazy">
+                        <span id="userAvatar">👤</span>
+                    </div>
+                    <h3 style="margin-bottom: var(--spacing-sm);" id="userName">Loading...</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: var(--spacing-xs);" id="userEmail">email@example.com</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: var(--spacing-xs);" id="userHandle">@member</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;" id="userSince">Member</p>
+                </div>
+
+                <nav class="account-nav" style="display: flex; flex-direction: column;">
+                    <a href="account.html" class="btn btn-outline" id="dashboardLink" style="justify-content: flex-start; margin-bottom: var(--spacing-sm);">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a>
+                    <a href="#orders" class="btn btn-outline" style="justify-content: flex-start; margin-bottom: var(--spacing-sm);">
+                        <i class="fas fa-box"></i> Orders
+                    </a>
+                    <a href="wishlist.html" class="btn btn-outline" style="justify-content: flex-start; margin-bottom: var(--spacing-sm);">
+                        <i class="fas fa-heart"></i> Wishlist
+                    </a>
+                    <a href="#addresses" class="btn btn-outline" style="justify-content: flex-start; margin-bottom: var(--spacing-sm);">
+                        <i class="fas fa-map-pin"></i> Addresses
+                    </a>
+                    <a href="#settings" class="btn btn-outline" style="justify-content: flex-start; margin-bottom: var(--spacing-sm);">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                    <button onclick="logoutUser();" class="btn btn-outline" style="justify-content: flex-start;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="account-main">
+                <!-- Dashboard -->
+                <div id="dashboard" class="account-dashboard" style="margin-bottom: var(--spacing-2xl);">
+                    <h2>Welcome, <span id="welcomeName">Member</span>!</h2>
+                    <p style="color: var(--text-muted); margin-bottom: var(--spacing-xs);" id="welcomeUsername">@member</p>
+                    <p style="color: var(--text-muted); margin-bottom: var(--spacing-lg);" id="welcomeMeta">Here's your account overview</p>
+
+                    <div class="card profile-photo-card" style="margin-bottom: var(--spacing-xl);">
+                        <div class="card-body">
+                            <div class="account-avatar account-avatar-lg" id="dashboardAvatar">
+                                <img id="profileAvatarImage" alt="Profile photo" loading="lazy">
+                                <span id="profileAvatar">👤</span>
+                            </div>
+                            <div class="profile-photo-content">
+                                <h3 style="margin: 0 0 var(--spacing-xs);">Profile Photo</h3>
+                                <p style="color: var(--text-muted); margin: 0 0 var(--spacing-sm);">Upload a photo to personalize your account.</p>
+                                <div style="display: flex; gap: var(--spacing-sm); flex-wrap: wrap;">
+                                    <input type="file" id="profilePhotoInput" accept="image/*" hidden>
+                                    <button type="button" class="btn btn-primary" id="profilePhotoBtn">
+                                        <i class="fas fa-camera"></i> Upload Photo
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-sm" id="profilePhotoRemove" style="display: none;">Remove</button>
+                                </div>
+                                <p style="color: var(--text-muted); margin: var(--spacing-xs) 0 0; font-size: 0.85rem;">JPG or PNG up to 2MB.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-3 account-stats" style="margin-bottom: var(--spacing-2xl);">
+                        <div class="card">
+                            <div class="card-body" style="text-align: center;">
+                                <div style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: var(--spacing-md);" id="statOrders">0</div>
+                                <h3 class="card-title">Total Orders</h3>
+                                <p class="card-text">View your purchase history</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body" style="text-align: center;">
+                                <div style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: var(--spacing-md);" id="statSpent">$0.00</div>
+                                <h3 class="card-title">Total Spent</h3>
+                                <p class="card-text">Across all purchases</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body" style="text-align: center;">
+                                <div style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: var(--spacing-md);" id="statWishlist">0</div>
+                                <h3 class="card-title">Wishlist Items</h3>
+                                <p class="card-text">Products you love</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="account-tracking">
+                        <div class="tracking-header">
+                            <div>
+                                <h3 style="margin: 0;">Shipment Tracking</h3>
+                                <p style="color: var(--pro-muted); margin: 0.35rem 0 0;">Latest delivery updates for your orders.</p>
+                            </div>
+                            <a class="btn btn-outline btn-sm" href="#orders">View all orders</a>
+                        </div>
+                        <div id="trackingList" class="tracking-list">
+                            <div style="color: var(--pro-muted);">No shipments yet. Place an order to see tracking here.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div id="orders">
+                    <h3 style="margin-bottom: var(--spacing-lg);">Recent Orders</h3>
+                    <div class="account-table" style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead style="background-color: var(--bg-secondary);">
+                                <tr>
+                                    <th style="padding: var(--spacing-md); text-align: left;">Order ID</th>
+                                    <th style="padding: var(--spacing-md); text-align: left;">Date</th>
+                                    <th style="padding: var(--spacing-md); text-align: left;">Status</th>
+                                    <th style="padding: var(--spacing-md); text-align: left; white-space: normal;">Tracking</th>
+                                    <th style="padding: var(--spacing-md); text-align: left;">Total</th>
+                                    <th style="padding: var(--spacing-md); text-align: left;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTableBody">
+                                <tr>
+                                    <td colspan="6" style="padding: var(--spacing-lg); color: var(--text-muted); text-align: center;">Loading your orders...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Addresses Section -->
+                <div id="addresses" style="margin-top: var(--spacing-2xl);">
+                    <h3 style="margin-bottom: var(--spacing-lg);">Saved Addresses</h3>
+                    <form id="addressForm" style="max-width: 700px; margin-bottom: var(--spacing-xl);">
+                        <div class="form-group">
+                            <label>Label (Optional)</label>
+                            <input type="text" id="addressLabel" placeholder="Home, Office">
+                        </div>
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" id="addressFirstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" id="addressLastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" id="addressPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Address Line 1</label>
+                            <input type="text" id="addressLine1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Address Line 2 (Optional)</label>
+                            <input type="text" id="addressLine2">
+                        </div>
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" id="addressCity" required>
+                        </div>
+                        <div class="form-group">
+                            <label>State/Province</label>
+                            <input type="text" id="addressState" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Postal Code</label>
+                            <input type="text" id="addressPostal" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Country</label>
+                            <input type="text" id="addressCountry" required>
+                        </div>
+                        <label class="checkbox-item" style="margin-bottom: var(--spacing-md);">
+                            <input type="checkbox" id="addressDefault">
+                            <span>Set as default address</span>
+                        </label>
+                        <button type="submit" class="btn btn-primary">Save Address</button>
+                    </form>
+
+                    <div id="addressList"></div>
+                </div>
+
+                <!-- Settings Section -->
+                <div id="settings" style="margin-top: var(--spacing-2xl);">
+                    <h3 style="margin-bottom: var(--spacing-lg);">Account Settings</h3>
+                    <form style="max-width: 500px;" id="settingsForm">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" id="firstNameInput" value="">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" id="lastNameInput" value="">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="emailInput" value="">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" id="phoneInput" value="">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+
+                    <hr style="border: none; border-top: var(--border-light); margin: var(--spacing-2xl) 0;">
+
+                    <div>
+                        <h4 style="margin-bottom: var(--spacing-md);">Change Password</h4>
+                        <form style="max-width: 500px;" id="passwordForm">
+                            <div class="form-group">
+                                <label>Current Password</label>
+                                <input type="password" id="currentPassword" autocomplete="current-password" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>New Password</label>
+                                <input type="password" id="newPassword" autocomplete="new-password" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Confirm Password</label>
+                                <input type="password" id="confirmNewPassword" autocomplete="new-password" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Update Password</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>About CORRIESELLS</h4>
+                    <p style="color: var(--text-muted);">Premium sustainable clothing.</p>
+                    <div class="social-links">
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="shop.html">All Products</a></li>
+                        <li><a href="shop.html?category=sale">Sale</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 CORRIESELLS. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/auth-client.js"></script>
+</body>
+
+</html>
+
+
+

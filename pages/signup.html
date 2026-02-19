@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - CORRIESELLS</title>
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/pro.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="header-wrapper">
+            <div class="container">
+                <div class="header-container">
+                    <!-- Logo -->
+                    <div class="logo">
+                        <a href="../index.html">
+                            <img src="../assets/images/logo.png" alt="CORRIESELLS Logo" class="logo-image">
+                            <span>CORRIESELLS</span>
+                        </a>
+                    </div>
+
+                    <!-- Navigation -->
+                    <nav style="display: none;">
+                        <ul></ul>
+                    </nav>
+
+                    <!-- Header Icons -->
+                    <div class="header-icons">
+                        <button class="nav-icon icon-btn" onclick="window.location.href='../index.html'">
+                            <i class="fas fa-home"></i>
+                        </button>
+                        <button class="cart-icon icon-btn" onclick="window.location.href='shop.html'">
+                            <i class="fas fa-shopping-bag"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Signup Container -->
+    <main class="auth-page-wrapper">
+        <div class="auth-container signup-container">
+            <div class="auth-header">
+                <h1><i class="fas fa-user-plus"></i> Create Account</h1>
+                <p>Set up your account to track orders, manage wishlist items, and checkout faster.</p>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle"></i> Account created! Check your email to verify.
+            </div>
+
+            <form id="signupForm" novalidate>
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input
+                        type="text"
+                        id="firstName"
+                        name="firstName"
+                        placeholder="Jane"
+                        required
+                        autocomplete="given-name"
+                        aria-describedby="firstNameError"
+                    >
+                    <div class="form-error" id="firstNameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input
+                        type="text"
+                        id="lastName"
+                        name="lastName"
+                        placeholder="Doe"
+                        required
+                        autocomplete="family-name"
+                        aria-describedby="lastNameError"
+                    >
+                    <div class="form-error" id="lastNameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="you@example.com"
+                        required
+                        autocomplete="email"
+                        inputmode="email"
+                        aria-describedby="emailHelp emailError"
+                    >
+                    <small class="field-helper" id="emailHelp">Use an email you check regularly for order updates.</small>
+                    <div class="form-error" id="emailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-field">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="••••••••"
+                            required
+                            autocomplete="new-password"
+                            aria-describedby="passwordError"
+                        >
+                        <button 
+                            type="button" 
+                            onclick="togglePasswordVisibility('password')" 
+                            class="password-toggle"
+                            aria-label="Show or hide password"
+                        >
+                            <i class="fas fa-eye" id="toggleIcon1"></i>
+                        </button>
+                    </div>
+                    <div class="form-error" id="passwordError"></div>
+
+                    <div class="password-requirements">
+                        <div class="requirement" id="req-length">
+                            <i class="fas fa-circle"></i> At least 8 characters
+                        </div>
+                        <div class="requirement" id="req-upper">
+                            <i class="fas fa-circle"></i> One uppercase letter
+                        </div>
+                        <div class="requirement" id="req-lower">
+                            <i class="fas fa-circle"></i> One lowercase letter
+                        </div>
+                        <div class="requirement" id="req-number">
+                            <i class="fas fa-circle"></i> One number
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="password-field">
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            name="confirmPassword" 
+                            placeholder="••••••••"
+                            required
+                            autocomplete="new-password"
+                            aria-describedby="confirmPasswordError"
+                        >
+                        <button 
+                            type="button" 
+                            onclick="togglePasswordVisibility('confirmPassword')" 
+                            class="password-toggle"
+                            aria-label="Show or hide confirm password"
+                        >
+                            <i class="fas fa-eye" id="toggleIcon2"></i>
+                        </button>
+                    </div>
+                    <div class="form-error" id="confirmPasswordError"></div>
+                </div>
+
+                <section class="legal-consent" aria-labelledby="legalConsentTitle">
+                    <div class="legal-consent-header">
+                        <p class="legal-consent-title" id="legalConsentTitle">Legal & Preferences</p>
+                        <p class="legal-consent-subtitle">Please review and confirm your choices before creating your account.</p>
+                    </div>
+
+                    <label class="consent-row required-option">
+                        <input type="checkbox" id="agreeTerms" name="agreeTerms" aria-describedby="agreeError legalNotice">
+                        <span class="consent-content">
+                            <span class="consent-line">
+                                I agree to the
+                                <a href="terms.html" target="_blank" rel="noopener noreferrer">Terms of Service</a>
+                                and
+                                <a href="privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
+                            </span>
+                            <span class="consent-note" id="legalNotice">Required to create your account and place orders.</span>
+                        </span>
+                    </label>
+                    <div class="form-error-checkbox" id="agreeError"></div>
+
+                    <label class="consent-row optional-option">
+                        <input type="checkbox" id="newsletter" name="newsletter">
+                        <span class="consent-content">
+                            <span class="consent-line">Email me product launches, offers, and seasonal updates.</span>
+                            <span class="consent-note">Optional. You can unsubscribe anytime from any marketing email.</span>
+                        </span>
+                    </label>
+
+                    <label class="consent-row optional-option">
+                        <input type="checkbox" id="rememberMe" name="rememberMe">
+                        <span class="consent-content">
+                            <span class="consent-line">Keep me signed in on this device.</span>
+                            <span class="consent-note">Optional. Uncheck if this is a shared device.</span>
+                        </span>
+                    </label>
+                </section>
+
+                <button type="submit" class="signup-btn" id="signupBtn">
+                    Create Secure Account
+                </button>
+            </form>
+            <p class="signup-footer-note">Protected checkout. Unsubscribe from marketing anytime.</p>
+
+            <div class="divider">
+                <span>Or Continue With</span>
+            </div>
+
+            <div class="social-login">
+                <div data-google-button></div>
+            </div>
+
+            <div class="login-link">
+                Already have an account? <a href="login.html">Sign in instead</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer style="margin-top: auto; background-color: var(--bg-primary); border-top: var(--border-light);">
+        <div class="footer-bottom container" style="padding: var(--spacing-lg); text-align: center; color: var(--text-muted);">
+            <p>&copy; 2026 CORRIESELLS. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lczk2ksAAAAAAQBz9yJZKTFJhtzAvPzvbljnOq-"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/auth-client.js"></script>
+    <script src="../assets/js/auth-google.js"></script>
+    <script src="../assets/js/auth-signup.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - CORRIESELLS</title>
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/pro.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-wrapper">
+            <div class="container">
+                <div class="header-container">
+                    <div class="logo">
+                        <a href="../index.html">
+                            <img src="../assets/images/logo.png" alt="CORRIESELLS Logo" class="logo-image">
+                            <span>CORRIESELLS</span>
+                        </a>
+                    </div>
+
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search products...">
+                    </div>
+
+                    <nav>
+                        <ul>
+                            <li><a href="../index.html">Home</a></li>
+                            <li class="dropdown">
+                                <a href="shop.html">Shop</a>
+                                <div class="dropdown-menu">
+                                    <a href="shop.html?category=mens">Men's</a>
+                                    <a href="shop.html?category=womens">Women's</a>
+                                    <a href="shop.html?category=kids">Kids'</a>
+                                    <a href="shop.html?category=accessories">Accessories</a>
+                                    <a href="shop.html?category=beachwear">Beachwear</a>
+                                    <a href="shop.html?category=sale">Sale</a>
+                                </div>
+                            </li>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                            <li class="nav-desktop-only"><a href="wishlist.html"><i class="far fa-heart"></i> Wishlist</a></li>
+                        </ul>
+                    </nav>
+
+                    <div class="header-icons">
+                        <button class="icon-btn account-btn" onclick="window.location.href='account.html'" aria-label="Account">
+                            <img class="account-avatar-image" alt="" loading="lazy">
+                            <i class="fas fa-user account-avatar-icon" aria-hidden="true"></i>
+                        </button>
+                        <button class="cart-icon icon-btn">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="badge" style="display: none;">0</span>
+                        </button>
+                        <div class="mobile-menu-toggle">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="modal-close cart-close">×</button>
+        </div>
+        <div class="cart-body">
+            <p class="text-center text-muted">Your cart is empty</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Subtotal:</span>
+                <span class="cart-total-amount">$0.00</span>
+            </div>
+            <div class="cart-actions">
+                <button class="btn btn-secondary" onclick="closeCart()">Continue Shopping</button>
+                <a class="btn btn-primary" data-checkout href="checkout.html" onclick="if(window.startCheckout){startCheckout(); return false;}">Checkout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Section -->
+    <section class="container" style="padding: var(--spacing-2xl) var(--spacing-lg);">
+        <!-- Product Details -->
+        <div class="product-layout" style="margin-bottom: var(--spacing-2xl);">
+            <!-- Product Image Gallery -->
+            <div>
+                <div style="background-color: var(--light-gray); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: var(--spacing-lg); aspect-ratio: 1;">
+                    <img id="mainImage" src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=700&fit=crop" alt="Product" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div id="productThumbs" class="thumb-grid"></div>
+            </div>
+
+            <!-- Product Details -->
+            <div>
+                <div class="product-category" id="productCategory">Premium Shirts</div>
+                <h1 id="productTitle">Premium Linen Shirt</h1>
+                <div style="display:flex; gap:var(--spacing-md); margin-top:var(--spacing-md);">
+                    <button id="prevProductBtn" class="btn btn-outline">← Previous</button>
+                    <button id="nextProductBtn" class="btn btn-outline">Next →</button>
+                </div>
+
+                <div class="product-rating" style="margin: var(--spacing-lg) 0;">
+                    <div class="stars">★★★★★</div>
+                    <span>(124 reviews)</span>
+                    <a href="#reviews" style="color: var(--primary-color); margin-left: var(--spacing-lg);">See reviews</a>
+                </div>
+
+                <div style="margin: var(--spacing-lg) 0;">
+                    <span id="productPrice" style="font-size: 2.5rem; font-weight: 700; color: var(--primary-color);">$89.99</span>
+                    <span style="color: var(--text-muted); text-decoration: line-through; margin-left: var(--spacing-md);">$129.99</span>
+                    <span style="background-color: var(--error); color: white; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); margin-left: var(--spacing-md); font-size: 0.875rem;">30% OFF</span>
+                </div>
+                <div id="productAvailability" class="product-availability" data-availability-for="">Available: --</div>
+
+                <p id="productDescription" style="color: var(--text-muted); margin-bottom: var(--spacing-lg);">Premium quality, ethically sourced organic linen shirt with timeless appeal. Perfect for casual or semi-formal occasions.</p>
+
+                <!-- Options -->
+                <div style="margin-bottom: var(--spacing-lg);">
+                    <label style="display: block; margin-bottom: var(--spacing-md); font-weight: 600;">Size</label>
+                    <div id="sizeOptions" style="display: flex; gap: var(--spacing-sm); flex-wrap: wrap;"></div>
+                </div>
+
+                <div style="margin-bottom: var(--spacing-lg);">
+                    <label style="display: block; margin-bottom: var(--spacing-md); font-weight: 600;">Color</label>
+                    <div id="colorOptions" style="display: flex; gap: var(--spacing-md);"></div>
+                </div>
+
+                <div style="margin-bottom: var(--spacing-lg);">
+                    <label style="display: block; margin-bottom: var(--spacing-md); font-weight: 600;">Quantity</label>
+                    <div style="display: flex; gap: var(--spacing-sm); align-items: center;">
+                        <button id="qty-decrement" class="btn btn-outline" style="width: 50px; height: 50px; padding: 0;">−</button>
+                        <input id="productQuantity" type="number" value="1" min="1" style="width: 60px; height: 50px; text-align: center; border: var(--border-light); background-color: var(--bg-secondary); color: var(--text-color); border-radius: var(--radius-md);">
+                        <button id="qty-increment" class="btn btn-outline" style="width: 50px; height: 50px; padding: 0;">+</button>
+                    </div>
+                </div>
+
+                <!-- CTA Buttons -->
+                <div style="display: flex; gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+                    <button id="addToCartBtn" class="btn btn-primary btn-lg" style="flex: 1;">
+                        <i class="fas fa-shopping-bag"></i> Add to Cart
+                    </button>
+                    <button id="productWishlistBtn" class="btn btn-outline btn-lg" style="width: 60px;" data-wishlist="" aria-label="Toggle wishlist">
+                        <i class="far fa-heart" style="font-size: 1.5rem;"></i>
+                    </button>
+                </div>
+
+                <a id="buyNowBtn" class="btn btn-secondary" style="width: 100%;" href="checkout.html">Buy Now</a>
+
+                <!-- Additional Info -->
+                <div style="border-top: var(--border-light); padding-top: var(--spacing-lg); margin-top: var(--spacing-lg);">
+                    <div style="display: flex; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+                        <i class="fas fa-check" style="color: var(--success);"></i>
+                        <div>
+                            <strong>Free Shipping</strong>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">Standard 5-7 business days (free over $10,000), Express 2-3 business days ($15), Overnight ($30). 150+ countries with tracking included. <a href="faq.html" style="color: var(--primary-color);">See FAQs</a></p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+                        <i class="fas fa-redo" style="color: var(--success);"></i>
+                        <div>
+                            <strong>30-Day Returns</strong>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">Hassle-free returns & exchanges</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: var(--spacing-md);">
+                        <i class="fas fa-leaf" style="color: var(--success);"></i>
+                        <div>
+                            <strong>Sustainable</strong>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">100% organic, eco-friendly materials</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="product-tabs">
+            <button class="tab-btn active" type="button" data-tab="description">Description</button>
+            <button class="tab-btn" type="button" data-tab="size">Size Guide</button>
+            <button class="tab-btn" type="button" data-tab="reviews">Reviews</button>
+        </div>
+
+        <!-- Description -->
+        <div class="tab-panel active" data-panel="description" id="description">
+            <h2>Product Description</h2>
+            <p id="productLongDescription">This premium linen shirt is crafted from 100% organic European linen, ensuring superior quality and comfort. The timeless design makes it versatile enough for casual days or dressier occasions. Perfect for warm weather, it provides natural breathability and a luxurious feel against the skin.</p>
+            <h3 style="margin-top: var(--spacing-lg);">Key Features:</h3>
+            <ul style="margin-left: var(--spacing-lg);">
+                <li>100% Organic European Linen</li>
+                <li>Sustainable manufacturing practices</li>
+                <li>Available in 4 colors</li>
+                <li>Sizes XS to XXL</li>
+                <li>Care instructions included</li>
+            </ul>
+        </div>
+
+        <!-- Size Guide -->
+        <div class="tab-panel" data-panel="size" id="size-guide">
+            <div class="size-guide-header">
+                <div>
+                    <h2>Size Guide</h2>
+                    <p class="muted">Find your best fit. Measurements are in inches.</p>
+                </div>
+                <a class="btn btn-outline btn-sm" href="size-guide.html">Full Size Guide</a>
+            </div>
+            <div class="size-guide-card">
+                <table class="size-guide-table">
+                    <thead>
+                        <tr>
+                            <th>Size</th>
+                            <th>Chest</th>
+                            <th>Waist</th>
+                            <th>Hip</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sizeGuideTable"></tbody>
+                </table>
+                <p id="sizeGuideNote" class="size-guide-note"></p>
+            </div>
+        </div>
+
+        <!-- Reviews -->
+        <div class="tab-panel" data-panel="reviews" id="reviews">
+            <div class="reviews-header">
+                <div>
+                    <h2>Customer Reviews</h2>
+                    <p class="muted">Verified purchases from trusted shoppers.</p>
+                </div>
+                <button class="btn btn-primary btn-sm" type="button" id="writeReviewBtn">Write a Review</button>
+            </div>
+
+            <div class="review-summary">
+                <div class="review-score">
+                    <div class="score">4.8</div>
+                    <div class="stars">★★★★★</div>
+                    <p class="muted">Based on 124 reviews</p>
+                </div>
+                <div class="review-bars">
+                    <div class="review-bar"><span>5 stars</span><div class="bar"><div style="width: 76%;"></div></div><span>94</span></div>
+                    <div class="review-bar"><span>4 stars</span><div class="bar"><div style="width: 18%;"></div></div><span>22</span></div>
+                    <div class="review-bar"><span>3 stars</span><div class="bar"><div style="width: 4%;"></div></div><span>5</span></div>
+                    <div class="review-bar"><span>2 stars</span><div class="bar"><div style="width: 1%;"></div></div><span>2</span></div>
+                    <div class="review-bar"><span>1 star</span><div class="bar"><div style="width: 1%;"></div></div><span>1</span></div>
+                </div>
+            </div>
+
+            <div class="review-list" id="reviewList">
+                <div class="review-card">
+                    <div class="review-meta">
+                        <div class="reviewer">Ava R.</div>
+                        <div class="stars">★★★★★</div>
+                        <div class="muted">Verified Buyer · 2 weeks ago</div>
+                    </div>
+                    <p>Beautiful fabric and tailoring. Fits true to size and feels premium without being heavy.</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-meta">
+                        <div class="reviewer">Jordan P.</div>
+                        <div class="stars">★★★★☆</div>
+                        <div class="muted">Verified Buyer · 1 month ago</div>
+                    </div>
+                    <p>Great color and drape. I sized up for a relaxed fit and it was perfect.</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-meta">
+                        <div class="reviewer">Maya K.</div>
+                        <div class="stars">★★★★★</div>
+                        <div class="muted">Verified Buyer · 6 weeks ago</div>
+                    </div>
+                    <p>Excellent craftsmanship. The material breathes well in warm weather.</p>
+                </div>
+            </div>
+
+            <form class="review-form" id="reviewForm">
+                <h3>Write a Review</h3>
+                <div class="review-form-grid">
+                    <input type="text" placeholder="Your name" required>
+                    <select required>
+                        <option value="" disabled selected>Rating</option>
+                        <option>5 - Excellent</option>
+                        <option>4 - Good</option>
+                        <option>3 - Fair</option>
+                        <option>2 - Poor</option>
+                        <option>1 - Bad</option>
+                    </select>
+                    <input type="email" placeholder="Email (kept private)" required>
+                </div>
+                <textarea rows="4" placeholder="Share your thoughts about the fit, quality, and styling."></textarea>
+                <button class="btn btn-primary" type="submit">Submit Review</button>
+            </form>
+        </div>
+
+        <!-- Related Products -->
+        <section>
+            <h2 class="section-title">Related Products</h2>
+            <div class="grid grid-3">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://cdn.shopify.com/s/files/1/0742/6628/0191/files/PSBW0129-41_Baby_Blue_35046e87-e338-4169-8635-8cda4a267fd2.jpg?v=1753325186" alt="Related">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Dresses</div>
+                        <h3 class="product-title">Silk Summer Dress</h3>
+                        <div class="product-availability" data-availability-for="product-2">Available: --</div>
+                        <div class="product-price-group">
+                            <span class="product-price">$124.99</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-sm" onclick="window.location.href='product.html?product=product-2'">View</button>
+                            <button class="btn btn-primary btn-sm" onclick="addToCart('product-2')">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://user2409.na.imgto.link/public/20260213/31639deb36c5ebb9bcf2fe95ba42a0fb-2.avif" alt="Related">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Bottoms</div>
+                        <h3 class="product-title">Casual Cotton Pants</h3>
+                        <div class="product-availability" data-availability-for="product-3">Available: --</div>
+                        <div class="product-price-group">
+                            <span class="product-price">$76.99</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-sm" onclick="window.location.href='product.html?product=product-3'">View</button>
+                            <button class="btn btn-primary btn-sm" onclick="addToCart('product-3')">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://user2408.na.imgto.link/public/20260213/c282925fd037d062a2e09a1682a67558-2.avif" alt="Related">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Jackets</div>
+                        <h3 class="product-title">Linen Jacket</h3>
+                        <div class="product-availability" data-availability-for="product-4">Available: --</div>
+                        <div class="product-price-group">
+                            <span class="product-price">$149.99</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-sm" onclick="window.location.href='product.html?product=product-4'">View</button>
+                            <button class="btn btn-primary btn-sm" onclick="addToCart('product-4')">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>About CORRIESELLS</h4>
+                    <p style="color: var(--text-muted);">Premium clothing inspired by cowrie shells.</p>
+                    <div class="social-links">
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="returns.html">Returns</a></li>
+                        <li><a href="shipping.html">Shipping</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="privacy.html">Privacy</a></li>
+                        <li><a href="terms.html">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 CORRIESELLS. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+    <script>
+        window.addEventListener('load', function() {
+            if (window.handleBuyNow && window.handleAddToCart) return;
+            const mainScript = document.createElement('script');
+            mainScript.src = '../assets/js/main.js';
+            document.body.appendChild(mainScript);
+        });
+    </script>
+</body>
+
+</html>
+
+

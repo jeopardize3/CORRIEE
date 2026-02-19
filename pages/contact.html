@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - CORRIESELLS</title>
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/pro.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-wrapper">
+            <div class="container">
+                <div class="header-container">
+                    <div class="logo">
+                        <a href="../index.html">
+                            <img src="../assets/images/logo.png" alt="CORRIESELLS Logo" class="logo-image">
+                            <span>CORRIESELLS</span>
+                        </a>
+                    </div>
+
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search products...">
+                    </div>
+
+                    <nav>
+                        <ul>
+                            <li><a href="../index.html">Home</a></li>
+                            <li><a href="shop.html">Shop</a></li>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="contact.html" class="active">Contact</a></li>
+                            <li class="nav-desktop-only"><a href="wishlist.html"><i class="far fa-heart"></i> Wishlist</a></li>
+                        </ul>
+                    </nav>
+
+                    <div class="header-icons">
+                        <button class="icon-btn account-btn" onclick="window.location.href='account.html'" aria-label="Account">
+                            <img class="account-avatar-image" alt="" loading="lazy">
+                            <i class="fas fa-user account-avatar-icon" aria-hidden="true"></i>
+                        </button>
+                        <button class="cart-icon icon-btn">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="badge" style="display: none;">0</span>
+                        </button>
+                        <div class="mobile-menu-toggle">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="modal-close cart-close">×</button>
+        </div>
+        <div class="cart-body">
+            <p class="text-center text-muted">Your cart is empty</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Subtotal:</span>
+                <span class="cart-total-amount">$0.00</span>
+            </div>
+            <div class="cart-actions">
+                <button class="btn btn-secondary" onclick="closeCart()">Continue Shopping</button>
+                <a class="btn btn-primary" data-checkout href="checkout.html" onclick="if(window.startCheckout){startCheckout(); return false;}">Checkout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero" style="min-height: 300px;">
+        <div class="hero-content">
+            <h1>Contact Us</h1>
+            <p class="hero-subtitle">We'd love to hear from you</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="container">
+        <div class="split-grid" style="margin-bottom: var(--spacing-2xl);">
+            <!-- Contact Form -->
+            <div>
+                <h2>Send us a Message</h2>
+                <form id="contactForm" onsubmit="submitContactForm(event)">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" name="subject" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea name="message" rows="5" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <div style="display: flex; gap: var(--spacing-sm);">
+                            <input type="checkbox" id="newsletter" name="newsletter">
+                            <label for="newsletter" style="margin: 0;">Sign me up for product drops and member offers</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                </form>
+            </div>
+
+            <!-- Contact Info -->
+            <div>
+                <h2>Get in Touch</h2>
+
+                <div style="margin-bottom: var(--spacing-xl);">
+                    <div style="display: flex; align-items: flex-start; gap: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
+                        <i class="fas fa-map-marker-alt" style="color: var(--primary-color); font-size: 1.5rem; margin-top: 0.25rem;"></i>
+                        <div>
+                            <h4 style="margin-bottom: var(--spacing-sm);">Address</h4>
+                            <p style="color: var(--text-muted);">
+                                29396 AL Highway 71<br>
+                                Higdon, AL 35979<br>
+                                United States
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: flex-start; gap: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
+                        <i class="fas fa-phone" style="color: var(--primary-color); font-size: 1.5rem; margin-top: 0.25rem;"></i>
+                        <div>
+                            <h4 style="margin-bottom: var(--spacing-sm);">Phone</h4>
+                            <p style="color: var(--text-muted);">
+                                (256) 555-0194<br>
+                                (256) 555-0137
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: flex-start; gap: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
+                        <i class="fas fa-envelope" style="color: var(--primary-color); font-size: 1.5rem; margin-top: 0.25rem;"></i>
+                        <div>
+                            <h4 style="margin-bottom: var(--spacing-sm);">Email</h4>
+                            <p style="color: var(--text-muted);">
+                                corriewhited@corriesells.com
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: flex-start; gap: var(--spacing-lg);">
+                        <i class="fas fa-clock" style="color: var(--primary-color); font-size: 1.5rem; margin-top: 0.25rem;"></i>
+                        <div>
+                            <h4 style="margin-bottom: var(--spacing-sm);">Business Hours</h4>
+                            <p style="color: var(--text-muted);">
+                                Monday - Friday: 9:00 AM - 6:00 PM (CT)<br>
+                                Saturday: 10:00 AM - 4:00 PM (CT)<br>
+                                Sunday: Closed
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Links -->
+                <h4 style="margin-bottom: var(--spacing-md);">Follow Us</h4>
+                <div class="social-links">
+                    <a href="https://instagram.com" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://facebook.com" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="https://twitter.com" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="https://pinterest.com" target="_blank" title="Pinterest"><i class="fab fa-pinterest"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map -->
+        <div style="margin-bottom: var(--spacing-2xl);">
+            <h2 style="margin-bottom: var(--spacing-lg);">Our Location</h2>
+            <iframe src="https://www.google.com/maps?q=29396+AL+Highway+71,+Higdon,+AL+35979&output=embed" width="100%" height="400" style="border: 0; border-radius: var(--radius-lg);" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <!-- FAQ CTA -->
+        <div style="background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(244,196,48,0.05)); padding: var(--spacing-2xl); border-radius: var(--radius-lg); text-align: center;">
+            <h2 style="margin-bottom: var(--spacing-md);">Have Questions?</h2>
+            <p style="color: var(--text-muted); margin-bottom: var(--spacing-lg);">Check out our FAQ section for answers to common questions.</p>
+            <a href="faq.html" class="btn btn-primary">View FAQ</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>About CORRIESELLS</h4>
+                    <p style="color: var(--text-muted);">Premium sustainable clothing inspired by cowrie shells.</p>
+                    <div class="social-links">
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="shop.html">All Products</a></li>
+                        <li><a href="shop.html?category=sale">Sale Items</a></li>
+                        <li><a href="shop.html?category=new">New Arrivals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="returns.html">Returns</a></li>
+                        <li><a href="shipping.html">Shipping</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 CORRIESELLS. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+</body>
+
+</html>
+
+

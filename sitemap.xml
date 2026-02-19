@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <!-- Homepage -->
+    <url>
+        <loc>https://corriesells.com/index.html</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <!-- Main Pages -->
+    <url>
+        <loc>https://corriesells.com/pages/shop.html</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.95</priority>
+    </url>
+    
+    <url>
+        <loc>https://corriesells.com/pages/product.html</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.90</priority>
+    </url>
+    
+    <url>
+        <loc>https://corriesells.com/pages/about.html</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+    </url>
+    
+    <url>
+        <loc>https://corriesells.com/pages/contact.html</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+    </url>
+    
+    <!-- User Authentication Pages -->
+    <url>
+        <loc>https://corriesells.com/pages/login.html</loc>
+        <lastmod>2026-02-09</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.70</priority>
+    </url>
+    
+    <url>
+        <loc>https://corriesells.com/pages/signup.html</loc>
+        <lastmod>2026-02-09</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.70</priority>
+    </url>
+
+    <url>
+        <loc>https://corriesells.com/pages/verify-email.html</loc>
+        <lastmod>2026-02-18</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.60</priority>
+    </url>
+    
+    <!-- User Account Pages -->
+    <url>
+        <loc>https://corriesells.com/pages/account.html</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.75</priority>
+    </url>
+    
+    <url>
+        <loc>https://corriesells.com/pages/wishlist.html</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.75</priority>
+    </url>
+    
+    <url>
+        <loc>https://corriesells.com/pages/checkout.html</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    
+    <!-- Support & Information Pages -->
+    <url>
+        <loc>https://corriesells.com/pages/faq.html</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.75</priority>
+    </url>
+    
+    <url>
+        <loc>https://corriesells.com/pages/returns.html</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>quarterly</changefreq>
+        <priority>0.70</priority>
+    </url>
+    
+    <url>
+        <loc>https://corriesells.com/pages/shipping.html</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>quarterly</changefreq>
+        <priority>0.70</priority>
+    </url>
+    
+    <url>
+        <loc>https://corriesells.com/pages/size-guide.html</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>quarterly</changefreq>
+        <priority>0.70</priority>
+    </url>
+    
+    <!-- Legal Pages -->
+    <url>
+        <loc>https://corriesells.com/pages/privacy.html</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.60</priority>
+    </url>
+    
+    <url>
+        <loc>https://corriesells.com/pages/terms.html</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.60</priority>
+    </url>
+    
+    <url>
+        <loc>https://corriesells.com/pages/cookies.html</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.60</priority>
+    </url>
+    
+    <url>
+        <loc>https://corriesells.com/pages/accessibility.html</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.60</priority>
+    </url>
+</urlset>

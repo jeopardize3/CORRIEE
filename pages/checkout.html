@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - CORRIESELLS</title>
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/pro.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap');
+        :root {
+            --checkout-bg: #f2f2f2;
+            --checkout-surface: #ffffff;
+            --checkout-muted: #5d5d5d;
+            --checkout-ink: #1f1f1f;
+            --checkout-accent: #0f3d2e;
+            --checkout-accent-strong: #0b2f24;
+            --checkout-border: rgba(31, 31, 31, 0.12);
+            --checkout-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+            --checkout-radius: 8px;
+        }
+        body.checkout-page {
+            background: var(--checkout-bg);
+            color: var(--checkout-ink);
+            font-family: 'Inter', 'SF Pro Text', system-ui, -apple-system, Segoe UI, sans-serif;
+        }
+        .checkout-page input,
+        .checkout-page select,
+        .checkout-page button,
+        .checkout-page textarea {
+            font-family: 'Inter', 'SF Pro Text', system-ui, -apple-system, Segoe UI, sans-serif;
+        }
+        .checkout-main {
+            padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-3xl);
+        }
+        .checkout-hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            flex-wrap: wrap;
+        }
+        .checkout-kicker {
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            font-size: 0.72rem;
+            color: var(--checkout-muted);
+            margin-bottom: var(--spacing-sm);
+        }
+        .checkout-title {
+            margin: 0 0 var(--spacing-sm);
+            font-size: clamp(1.9rem, 3vw, 2.6rem);
+        }
+        .checkout-subtitle {
+            margin: 0;
+            color: var(--checkout-muted);
+            max-width: 520px;
+        }
+        .checkout-trust {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--checkout-radius);
+            border: 1px solid var(--checkout-border);
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 10px 26px rgba(28, 26, 23, 0.08);
+            color: var(--checkout-ink);
+            font-size: 0.95rem;
+        }
+        .checkout-trust i {
+            color: var(--checkout-accent);
+            background: rgba(15, 61, 46, 0.12);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .checkout-steps {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-2xl);
+            flex-wrap: wrap;
+            position: relative;
+            padding: 0 var(--spacing-xs);
+        }
+        .checkout-steps::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            background: rgba(31, 31, 31, 0.12);
+            transform: translateY(-50%);
+        }
+        .checkout-step {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--checkout-border);
+            color: var(--checkout-muted);
+            background: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+        .checkout-step.active {
+            color: var(--checkout-ink);
+            border-color: rgba(15, 61, 46, 0.35);
+            background: rgba(15, 61, 46, 0.1);
+        }
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 360px;
+            gap: var(--spacing-2xl);
+            align-items: start;
+        }
+        .checkout-card {
+            background: var(--checkout-surface);
+            border-radius: var(--checkout-radius);
+            border: 1px solid var(--checkout-border);
+            padding: var(--spacing-xl);
+            box-shadow: var(--checkout-shadow);
+        }
+        .checkout-card h2,
+        .checkout-card h2 i {
+            letter-spacing: 0.01em;
+        }
+        .summary-card {
+            position: sticky;
+            top: var(--spacing-2xl);
+            align-self: start;
+        }
+        .checkout-card h2 {
+            margin: 0 0 var(--spacing-lg);
+            font-size: 1.4rem;
+        }
+        .checkout-card h2 i {
+            color: var(--checkout-accent);
+            margin-right: var(--spacing-xs);
+        }
+        .field-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: var(--spacing-md);
+        }
+        .field-grid .form-group {
+            margin: 0;
+        }
+        .field-grid input,
+        .field-grid select {
+            width: 100%;
+            height: 48px;
+            border-radius: var(--checkout-radius);
+            border: 1px solid var(--checkout-border);
+            background: #fff;
+            padding: 0 var(--spacing-md);
+            color: var(--checkout-ink);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .checkout-page textarea {
+            width: 100%;
+            border-radius: var(--checkout-radius);
+            border: 1px solid var(--checkout-border);
+            padding: var(--spacing-md);
+            color: var(--checkout-ink);
+            resize: vertical;
+            min-height: 90px;
+            font-family: 'Inter', 'SF Pro Text', system-ui, -apple-system, Segoe UI, sans-serif;
+        }
+        .field-grid input:focus,
+        .field-grid select:focus {
+            outline: none;
+            border-color: rgba(201, 138, 47, 0.6);
+            box-shadow: 0 0 0 4px rgba(201, 138, 47, 0.15);
+        }
+        .address-book {
+            border: 1px solid var(--checkout-border);
+            border-radius: var(--checkout-radius);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            background: rgba(15, 61, 46, 0.03);
+        }
+        .address-book-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+        }
+        .address-book-actions {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: var(--spacing-sm);
+            align-items: center;
+        }
+        .address-book-actions select {
+            height: 44px;
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md) 0;
+            border-bottom: 1px dashed var(--checkout-border);
+        }
+        .summary-item:last-of-type { border-bottom: none; }
+        .summary-meta { color: var(--checkout-muted); font-size: 0.85rem; }
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-top: var(--spacing-md);
+        }
+        .option-row {
+            display: grid;
+            gap: var(--spacing-sm);
+        }
+        .option-card {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--checkout-radius);
+            border: 1px solid var(--checkout-border);
+            background: #fff;
+            cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .option-card:hover {
+            border-color: rgba(15, 61, 46, 0.4);
+            box-shadow: 0 8px 20px rgba(31, 31, 31, 0.08);
+            transform: translateY(-1px);
+        }
+        .option-card input { accent-color: var(--checkout-accent); }
+        .option-card:has(input:checked),
+        .option-card.is-selected {
+            border-color: rgba(15, 61, 46, 0.45);
+            box-shadow: 0 10px 26px rgba(15, 61, 46, 0.12);
+        }
+        .payment-methods {
+            display: grid;
+            gap: var(--spacing-sm);
+        }
+        .payment-method {
+            display: grid;
+            gap: var(--spacing-sm);
+        }
+        .payment-method .payment-panel {
+            display: block;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            padding: 0 var(--spacing-md);
+            border: 1px solid var(--checkout-border);
+            border-radius: var(--checkout-radius);
+            background: rgba(15, 61, 46, 0.03);
+            transform: translateY(-4px);
+            transition: max-height 220ms ease, opacity 180ms ease, transform 200ms ease, padding 180ms ease;
+        }
+        .payment-method.is-selected .payment-panel {
+            padding: var(--spacing-md);
+            max-height: 520px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .payment-method.is-selected .payment-panel.field-grid {
+            display: grid;
+        }
+        .checkout-meta-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-xl);
+        }
+        .checkout-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--checkout-border);
+            background: #fff;
+            color: var(--checkout-muted);
+            font-size: 0.78rem;
+        }
+        .checkout-chip i {
+            color: var(--checkout-accent);
+        }
+        .security-ribbon {
+            margin-top: var(--spacing-2xl);
+            background: #fff;
+            border: 1px solid var(--checkout-border);
+            border-radius: var(--checkout-radius);
+            padding: var(--spacing-md) var(--spacing-lg);
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--checkout-muted);
+        }
+        .security-ribbon strong {
+            color: var(--checkout-ink);
+        }
+        .security-ribbon i {
+            color: var(--checkout-accent);
+        }
+        .payment-toggle {
+            justify-content: space-between;
+        }
+        .payment-label {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .payment-title {
+            font-weight: 600;
+        }
+        .payment-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--checkout-border);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .payment-logo.paypal {
+            border-color: rgba(0, 48, 135, 0.3);
+            color: #003087;
+            background: rgba(0, 48, 135, 0.06);
+        }
+        .payment-logo.applepay {
+            border-color: rgba(0, 0, 0, 0.25);
+            color: #111;
+            background: rgba(0, 0, 0, 0.06);
+        }
+        .payment-logo.googlepay {
+            border-color: rgba(66, 133, 244, 0.35);
+            color: #1a73e8;
+            background: rgba(66, 133, 244, 0.12);
+        }
+        .payment-logo.shoppay {
+            border-color: rgba(91, 64, 211, 0.35);
+            color: #5b40d3;
+            background: rgba(91, 64, 211, 0.12);
+        }
+        .wallet-quick {
+            margin-top: var(--spacing-md);
+        }
+        .wallet-quick .btn {
+            width: 100%;
+            font-weight: 600;
+        }
+        .wallet-quick .btn i {
+            margin-right: 6px;
+        }
+        #googlePayQuickBtn {
+            background: #000;
+            border-color: #000;
+            color: #fff;
+        }
+        #googlePayQuickBtn:hover {
+            background: #111;
+            border-color: #111;
+            color: #fff;
+        }
+        .checkout-page .btn-primary {
+            background: var(--checkout-accent);
+            border-color: var(--checkout-accent);
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+        .checkout-page .btn-primary:hover {
+            background: var(--checkout-accent-strong);
+            border-color: var(--checkout-accent-strong);
+        }
+        .summary-image {
+            width: 64px;
+            height: 84px;
+            object-fit: cover;
+            border-radius: var(--checkout-radius);
+            border: 1px solid var(--checkout-border);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        }
+        .summary-product-name {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-weight: 500;
+        }
+        .checkout-left .checkout-card h2,
+        .checkout-left label,
+        .checkout-left strong {
+            font-weight: 600;
+        }
+        .checkout-summary-title,
+        .checkout-left .product-name {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+        }
+        @media (max-width: 980px) {
+            .checkout-grid { grid-template-columns: 1fr; }
+            .field-grid { grid-template-columns: 1fr; }
+            .summary-card { position: static; }
+        }
+        @media (max-width: 720px) {
+            .checkout-hero {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .checkout-trust {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            .checkout-steps {
+                gap: var(--spacing-sm);
+            }
+            .checkout-card {
+                padding: var(--spacing-lg);
+            }
+        }
+    </style>
+</head>
+<body class="checkout-page">
+    <header>
+        <div class="header-wrapper">
+            <div class="container">
+                <div class="header-container">
+                    <div class="logo">
+                        <a href="../index.html">
+                            <img src="../assets/images/logo.png" alt="CORRIESELLS Logo" class="logo-image">
+                            <span>CORRIESELLS</span>
+                        </a>
+                    </div>
+                    <nav style="margin-left:auto;"></nav>
+                    <div class="header-icons">
+                        <button class="nav-icon icon-btn" onclick="window.location.href='../index.html'">
+                            <i class="fas fa-home"></i>
+                        </button>
+                        <button class="cart-icon icon-btn">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="badge" style="display:none;">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="checkout-main container">
+        <div class="checkout-hero">
+            <div>
+                <p class="checkout-kicker">Secure Checkout</p>
+                <h1 class="checkout-title">Complete Your Order</h1>
+                <p class="checkout-subtitle">Review your details and confirm payment. Your order is encrypted and protected.</p>
+            </div>
+            <div class="checkout-trust">
+                <i class="fas fa-shield-alt"></i>
+                <div>
+                    <strong>Protected Checkout</strong>
+                    <div class="summary-meta">Encrypted payments · Trusted processing</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="checkout-steps">
+            <span class="checkout-step active"><i class="fas fa-map-marker-alt"></i> Shipping</span>
+            <span class="checkout-step"><i class="fas fa-truck"></i> Delivery</span>
+            <span class="checkout-step"><i class="fas fa-credit-card"></i> Payment</span>
+            <span class="checkout-step"><i class="fas fa-check"></i> Confirm</span>
+        </div>
+        <div class="checkout-meta-chips">
+            <span class="checkout-chip"><i class="fas fa-layer-group"></i> Cart ID: #FASHION12345</span>
+            <span class="checkout-chip"><i class="fas fa-check-circle"></i> Inventory verified</span>
+            <span class="checkout-chip"><i class="fas fa-lock"></i> SSL Encrypted</span>
+            <span class="checkout-chip"><i class="fas fa-user-shield"></i> Customer session active</span>
+        </div>
+
+        <div class="drawer-backdrop" data-drawer-backdrop="checkout-summary"></div>
+        <div class="drawer-toolbar">
+            <button class="btn btn-outline drawer-toggle" type="button" data-drawer-toggle="checkout-summary" aria-controls="checkoutSummary" aria-expanded="false">
+                <i class="fas fa-receipt"></i> Order Summary
+            </button>
+        </div>
+        <div class="checkout-grid">
+            <div class="checkout-left">
+                <div class="checkout-card">
+                    <h2><i class="fas fa-truck"></i> Delivery</h2>
+                    <div class="option-row" data-option-group="shipping">
+                        <label class="option-card is-selected">
+                            <input type="radio" name="shipping" value="free" data-cost="0" data-label="Standard delivery" data-eta="3-5 days" checked>
+                            <div>
+                                <strong>Standard (3-5 days)</strong>
+                                <div class="summary-meta">Free</div>
+                            </div>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="shipping" value="express" data-cost="15" data-label="Express delivery" data-eta="1-2 days">
+                            <div>
+                                <strong>Express (1-2 days)</strong>
+                                <div class="summary-meta">$15.00</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="checkout-card">
+                    <h2><i class="fas fa-map-marker-alt"></i> Shipping Address</h2>
+                    <div class="address-book">
+                        <div class="address-book-header">
+                            <strong>Saved Addresses</strong>
+                            <span class="summary-meta">From your account</span>
+                        </div>
+                        <div class="address-book-actions">
+                            <select id="savedAddressSelect">
+                                <option value="">Select a saved address</option>
+                            </select>
+                            <button class="btn btn-outline" type="button" id="applySavedAddressBtn">Use Address</button>
+                        </div>
+                        <div class="summary-meta" id="savedAddressEmpty" style="margin-top: var(--spacing-sm); display:none;">
+                            No saved addresses yet. Add one in your account to reuse it here.
+                        </div>
+                    </div>
+                    <div class="field-grid">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" id="shipFirstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" id="shipLastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="shipEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" id="shipPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Street Address</label>
+                            <input type="text" id="shipLine1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Apt, Suite</label>
+                            <input type="text" id="shipLine2">
+                        </div>
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" id="shipCity" required>
+                        </div>
+                        <div class="form-group">
+                            <label>State</label>
+                            <input type="text" id="shipState" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Postal Code</label>
+                            <input type="text" id="shipPostal" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Country</label>
+                            <select id="shipCountry" required>
+                                <option value="Afghanistan">Afghanistan</option>
+                                <option value="Albania">Albania</option>
+                                <option value="Algeria">Algeria</option>
+                                <option value="Andorra">Andorra</option>
+                                <option value="Angola">Angola</option>
+                                <option value="Antigua and Barbuda">Antigua and Barbuda</option>
+                                <option value="Argentina">Argentina</option>
+                                <option value="Armenia">Armenia</option>
+                                <option value="Australia">Australia</option>
+                                <option value="Austria">Austria</option>
+                                <option value="Azerbaijan">Azerbaijan</option>
+                                <option value="Bahamas">Bahamas</option>
+                                <option value="Bahrain">Bahrain</option>
+                                <option value="Bangladesh">Bangladesh</option>
+                                <option value="Barbados">Barbados</option>
+                                <option value="Belarus">Belarus</option>
+                                <option value="Belgium">Belgium</option>
+                                <option value="Belize">Belize</option>
+                                <option value="Benin">Benin</option>
+                                <option value="Bhutan">Bhutan</option>
+                                <option value="Bolivia">Bolivia</option>
+                                <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+                                <option value="Botswana">Botswana</option>
+                                <option value="Brazil">Brazil</option>
+                                <option value="Brunei">Brunei</option>
+                                <option value="Bulgaria">Bulgaria</option>
+                                <option value="Burkina Faso">Burkina Faso</option>
+                                <option value="Burundi">Burundi</option>
+                                <option value="Cabo Verde">Cabo Verde</option>
+                                <option value="Cambodia">Cambodia</option>
+                                <option value="Cameroon">Cameroon</option>
+                                <option value="Canada">Canada</option>
+                                <option value="Central African Republic">Central African Republic</option>
+                                <option value="Chad">Chad</option>
+                                <option value="Chile">Chile</option>
+                                <option value="China">China</option>
+                                <option value="Colombia">Colombia</option>
+                                <option value="Comoros">Comoros</option>
+                                <option value="Congo, Democratic Republic of the">Congo, Democratic Republic of the</option>
+                                <option value="Congo, Republic of the">Congo, Republic of the</option>
+                                <option value="Costa Rica">Costa Rica</option>
+                                <option value="Cote d'Ivoire">Cote d'Ivoire</option>
+                                <option value="Croatia">Croatia</option>
+                                <option value="Cuba">Cuba</option>
+                                <option value="Cyprus">Cyprus</option>
+                                <option value="Czechia">Czechia</option>
+                                <option value="Denmark">Denmark</option>
+                                <option value="Djibouti">Djibouti</option>
+                                <option value="Dominica">Dominica</option>
+                                <option value="Dominican Republic">Dominican Republic</option>
+                                <option value="Ecuador">Ecuador</option>
+                                <option value="Egypt">Egypt</option>
+                                <option value="El Salvador">El Salvador</option>
+                                <option value="Equatorial Guinea">Equatorial Guinea</option>
+                                <option value="Eritrea">Eritrea</option>
+                                <option value="Estonia">Estonia</option>
+                                <option value="Eswatini">Eswatini</option>
+                                <option value="Ethiopia">Ethiopia</option>
+                                <option value="Fiji">Fiji</option>
+                                <option value="Finland">Finland</option>
+                                <option value="France">France</option>
+                                <option value="Gabon">Gabon</option>
+                                <option value="Gambia">Gambia</option>
+                                <option value="Georgia">Georgia</option>
+                                <option value="Germany">Germany</option>
+                                <option value="Ghana">Ghana</option>
+                                <option value="Greece">Greece</option>
+                                <option value="Grenada">Grenada</option>
+                                <option value="Guatemala">Guatemala</option>
+                                <option value="Guinea">Guinea</option>
+                                <option value="Guinea-Bissau">Guinea-Bissau</option>
+                                <option value="Guyana">Guyana</option>
+                                <option value="Haiti">Haiti</option>
+                                <option value="Honduras">Honduras</option>
+                                <option value="Hungary">Hungary</option>
+                                <option value="Iceland">Iceland</option>
+                                <option value="India">India</option>
+                                <option value="Indonesia">Indonesia</option>
+                                <option value="Iran">Iran</option>
+                                <option value="Iraq">Iraq</option>
+                                <option value="Ireland">Ireland</option>
+                                <option value="Israel">Israel</option>
+                                <option value="Italy">Italy</option>
+                                <option value="Jamaica">Jamaica</option>
+                                <option value="Japan">Japan</option>
+                                <option value="Jordan">Jordan</option>
+                                <option value="Kazakhstan">Kazakhstan</option>
+                                <option value="Kenya">Kenya</option>
+                                <option value="Kiribati">Kiribati</option>
+                                <option value="Kuwait">Kuwait</option>
+                                <option value="Kyrgyzstan">Kyrgyzstan</option>
+                                <option value="Laos">Laos</option>
+                                <option value="Latvia">Latvia</option>
+                                <option value="Lebanon">Lebanon</option>
+                                <option value="Lesotho">Lesotho</option>
+                                <option value="Liberia">Liberia</option>
+                                <option value="Libya">Libya</option>
+                                <option value="Liechtenstein">Liechtenstein</option>
+                                <option value="Lithuania">Lithuania</option>
+                                <option value="Luxembourg">Luxembourg</option>
+                                <option value="Madagascar">Madagascar</option>
+                                <option value="Malawi">Malawi</option>
+                                <option value="Malaysia">Malaysia</option>
+                                <option value="Maldives">Maldives</option>
+                                <option value="Mali">Mali</option>
+                                <option value="Malta">Malta</option>
+                                <option value="Marshall Islands">Marshall Islands</option>
+                                <option value="Mauritania">Mauritania</option>
+                                <option value="Mauritius">Mauritius</option>
+                                <option value="Mexico">Mexico</option>
+                                <option value="Micronesia">Micronesia</option>
+                                <option value="Moldova">Moldova</option>
+                                <option value="Monaco">Monaco</option>
+                                <option value="Mongolia">Mongolia</option>
+                                <option value="Montenegro">Montenegro</option>
+                                <option value="Morocco">Morocco</option>
+                                <option value="Mozambique">Mozambique</option>
+                                <option value="Myanmar">Myanmar</option>
+                                <option value="Namibia">Namibia</option>
+                                <option value="Nauru">Nauru</option>
+                                <option value="Nepal">Nepal</option>
+                                <option value="Netherlands">Netherlands</option>
+                                <option value="New Zealand">New Zealand</option>
+                                <option value="Nicaragua">Nicaragua</option>
+                                <option value="Niger">Niger</option>
+                                <option value="Nigeria">Nigeria</option>
+                                <option value="North Korea">North Korea</option>
+                                <option value="North Macedonia">North Macedonia</option>
+                                <option value="Norway">Norway</option>
+                                <option value="Oman">Oman</option>
+                                <option value="Pakistan">Pakistan</option>
+                                <option value="Palau">Palau</option>
+                                <option value="Palestine">Palestine</option>
+                                <option value="Panama">Panama</option>
+                                <option value="Papua New Guinea">Papua New Guinea</option>
+                                <option value="Paraguay">Paraguay</option>
+                                <option value="Peru">Peru</option>
+                                <option value="Philippines">Philippines</option>
+                                <option value="Poland">Poland</option>
+                                <option value="Portugal">Portugal</option>
+                                <option value="Qatar">Qatar</option>
+                                <option value="Romania">Romania</option>
+                                <option value="Russia">Russia</option>
+                                <option value="Rwanda">Rwanda</option>
+                                <option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option>
+                                <option value="Saint Lucia">Saint Lucia</option>
+                                <option value="Saint Vincent and the Grenadines">Saint Vincent and the Grenadines</option>
+                                <option value="Samoa">Samoa</option>
+                                <option value="San Marino">San Marino</option>
+                                <option value="Sao Tome and Principe">Sao Tome and Principe</option>
+                                <option value="Saudi Arabia">Saudi Arabia</option>
+                                <option value="Senegal">Senegal</option>
+                                <option value="Serbia">Serbia</option>
+                                <option value="Seychelles">Seychelles</option>
+                                <option value="Sierra Leone">Sierra Leone</option>
+                                <option value="Singapore">Singapore</option>
+                                <option value="Slovakia">Slovakia</option>
+                                <option value="Slovenia">Slovenia</option>
+                                <option value="Solomon Islands">Solomon Islands</option>
+                                <option value="Somalia">Somalia</option>
+                                <option value="South Africa">South Africa</option>
+                                <option value="South Korea">South Korea</option>
+                                <option value="South Sudan">South Sudan</option>
+                                <option value="Spain">Spain</option>
+                                <option value="Sri Lanka">Sri Lanka</option>
+                                <option value="Sudan">Sudan</option>
+                                <option value="Suriname">Suriname</option>
+                                <option value="Sweden">Sweden</option>
+                                <option value="Switzerland">Switzerland</option>
+                                <option value="Syria">Syria</option>
+                                <option value="Taiwan">Taiwan</option>
+                                <option value="Tajikistan">Tajikistan</option>
+                                <option value="Tanzania">Tanzania</option>
+                                <option value="Thailand">Thailand</option>
+                                <option value="Timor-Leste">Timor-Leste</option>
+                                <option value="Togo">Togo</option>
+                                <option value="Tonga">Tonga</option>
+                                <option value="Trinidad and Tobago">Trinidad and Tobago</option>
+                                <option value="Tunisia">Tunisia</option>
+                                <option value="Turkey">Turkey</option>
+                                <option value="Turkmenistan">Turkmenistan</option>
+                                <option value="Tuvalu">Tuvalu</option>
+                                <option value="Uganda">Uganda</option>
+                                <option value="Ukraine">Ukraine</option>
+                                <option value="United Arab Emirates">United Arab Emirates</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="United States" selected>United States</option>
+                                <option value="Uruguay">Uruguay</option>
+                                <option value="Uzbekistan">Uzbekistan</option>
+                                <option value="Vanuatu">Vanuatu</option>
+                                <option value="Vatican City">Vatican City</option>
+                                <option value="Venezuela">Venezuela</option>
+                                <option value="Vietnam">Vietnam</option>
+                                <option value="Yemen">Yemen</option>
+                                <option value="Zambia">Zambia</option>
+                                <option value="Zimbabwe">Zimbabwe</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top: var(--spacing-lg);">
+                        <label>Delivery Instructions (Optional)</label>
+                        <textarea id="shipNotes" rows="3" placeholder="e.g., leave with concierge, gate code, delivery window"></textarea>
+                    </div>
+                </div>
+
+                <div class="checkout-card">
+                    <h2><i class="fas fa-credit-card"></i> Payment</h2>
+                    <div class="payment-methods" data-option-group="payment">
+                        <div class="payment-method is-selected">
+                            <label class="option-card payment-toggle is-selected">
+                                <input type="radio" name="payment" value="card" checked>
+                                <div class="payment-label">
+                                    <span class="payment-title">Credit / Debit Card</span>
+                                    <span class="summary-meta">Visa, Mastercard, Amex</span>
+                                </div>
+                                <span class="payment-logo">Secure Card</span>
+                            </label>
+                            <div class="payment-panel field-grid" id="cardFields">
+                                <div class="form-group">
+                                    <label>Cardholder Name</label>
+                                    <input type="text" id="cardName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Card Number</label>
+                                    <input type="text" id="cardNumber" placeholder="4111 1111 1111 1111" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Expiry Date</label>
+                                    <input type="text" id="cardExpiry" placeholder="MM/YY" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>CVV</label>
+                                    <input type="text" id="cardCvv" placeholder="123" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="payment-method">
+                            <label class="option-card payment-toggle">
+                                <input type="radio" name="payment" value="paypal">
+                                <div class="payment-label">
+                                    <span class="payment-title">PayPal</span>
+                                    <span class="summary-meta">Pay with PayPal</span>
+                                </div>
+                                <span class="payment-logo paypal"><i class="fab fa-paypal"></i> PayPal</span>
+                            </label>
+                            <div class="payment-panel" id="paypalFields">
+                                <div class="form-group">
+                                    <label>PayPal Email</label>
+                                    <input type="email" id="paypalEmail" placeholder="you@example.com">
+                                </div>
+                                <p class="summary-meta" style="margin: var(--spacing-sm) 0 0;">We’ll redirect you to PayPal after you review your order.</p>
+                            </div>
+                        </div>
+
+                        <div class="payment-method">
+                            <label class="option-card payment-toggle">
+                                <input type="radio" name="payment" value="applepay">
+                                <div class="payment-label">
+                                    <span class="payment-title">Apple Pay</span>
+                                    <span class="summary-meta">Fast checkout on Apple devices</span>
+                                </div>
+                                <span class="payment-logo applepay"><i class="fab fa-apple-pay"></i> Apple Pay</span>
+                            </label>
+                            <div class="payment-panel" id="applePayFields">
+                                <p class="summary-meta" style="margin: var(--spacing-sm) 0 0;">Confirm with Face ID or Touch ID to complete your order.</p>
+                            </div>
+                        </div>
+
+                        <div class="payment-method">
+                            <label class="option-card payment-toggle">
+                                <input type="radio" name="payment" value="shoppay">
+                                <div class="payment-label">
+                                    <span class="payment-title">Shop Pay</span>
+                                    <span class="summary-meta">Save details for faster checkout</span>
+                                </div>
+                                <span class="payment-logo shoppay"><i class="fab fa-shopify"></i> Shop Pay</span>
+                            </label>
+                            <div class="payment-panel" id="shopPayFields">
+                                <p class="summary-meta" style="margin: var(--spacing-sm) 0 0;">Log in to Shop Pay to autofill shipping and payment.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="radio" name="payment" value="googlepay" id="googlePayHidden" style="display: none;">
+
+                    <div class="wallet-quick">
+                        <button class="btn btn-outline" type="button" id="googlePayQuickBtn">
+                            <i class="fab fa-google-pay"></i> Buy now with Google Pay
+                        </button>
+                    </div>
+
+                    <div style="margin-top: var(--spacing-lg);">
+                        <button class="btn btn-primary btn-lg" style="width:100%;" id="placeOrderBtn"><i class="fas fa-lock"></i> Complete Order</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkout-card summary-card mobile-drawer drawer-right" id="checkoutSummary" data-drawer="checkout-summary">
+                <div class="drawer-header">
+                    <h2 style="margin: 0;"><i class="fas fa-receipt"></i> Order Summary</h2>
+                    <button class="drawer-close" type="button" data-drawer-close="checkout-summary" aria-label="Close summary">&times;</button>
+                </div>
+                <h2 class="drawer-title"><i class="fas fa-receipt"></i> Order Summary</h2>
+                <div id="orderItems"></div>
+                <div style="border-top: 1px solid var(--checkout-border); padding-top: var(--spacing-lg); margin-top: var(--spacing-lg);">
+                    <div style="display:flex; justify-content:space-between; margin-bottom: var(--spacing-sm);">
+                        <span>Subtotal</span>
+                        <span id="summarySubtotal">$0.00</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom: 6px; color: var(--checkout-muted);">
+                        <span>Shipping</span>
+                        <span id="summaryShipping">Free</span>
+                    </div>
+                    <div class="summary-meta" id="summaryShippingLabel" style="margin-bottom: var(--spacing-sm);">Standard delivery · 3-5 days</div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom: var(--spacing-sm); color: var(--checkout-muted);">
+                        <span>Tax</span>
+                        <span id="summaryTax">$0.00</span>
+                    </div>
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <span id="summaryTotal">$0.00</span>
+                    </div>
+                </div>
+                <div style="margin-top: var(--spacing-lg);">
+                    <a class="btn btn-outline" href="shop.html" style="width:100%;">Back to Shop</a>
+                </div>
+            </div>
+        </div>
+        <div class="security-ribbon">
+            <span><strong>Security Ribbon</strong> · PCI compliant · 256-bit encryption · Money-back guarantee</span>
+            <span><i class="fas fa-shield-alt"></i> Trusted checkout</span>
+        </div>
+    </section>
+
+    <footer style="margin-top: var(--spacing-2xl);">
+        <div class="footer-content container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 CORRIESELLS. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+    <script>
+        (() => {
+        const STORAGE_CART = 'corriesells_cart';
+        const STORAGE_ORDERS = 'corriesells_orders';
+        const STORAGE_SHIPPING_PREF = 'corriesells_shipping_pref';
+        const STORAGE_USER = 'corriesells_user';
+        const STORAGE_USERS = 'corriesells_users';
+        const STORAGE_ADDRESSES = 'corriesells_addresses';
+        const TAX_RATE = 0.08;
+
+        function parsePriceValue(value) {
+            if (value == null) return 0;
+            if (typeof value === 'number' && Number.isFinite(value)) return value;
+            const cleaned = String(value).replace(/[^0-9.-]/g, '');
+            const parsed = Number.parseFloat(cleaned);
+            return Number.isFinite(parsed) ? parsed : 0;
+        }
+
+        function readJson(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch (e) {
+                return fallback;
+            }
+        }
+
+        function normalizeEmail(value) {
+            return (value || '').trim().toLowerCase();
+        }
+
+        function coerceCartArray(value) {
+            if (Array.isArray(value)) return value;
+            if (!value) return [];
+            if (Array.isArray(value.items)) return value.items;
+            if (Array.isArray(value.cart)) return value.cart;
+            if (typeof value === 'object') return Object.values(value);
+            return [];
+        }
+
+        function updateOptionSelections(groupName) {
+            const group = document.querySelector(`[data-option-group="${groupName}"]`);
+            if (!group) return;
+            group.querySelectorAll('.option-card').forEach((card) => {
+                const input = card.querySelector('input[type="radio"]');
+                const isChecked = !!(input && input.checked);
+                card.classList.toggle('is-selected', isChecked);
+                const wrapper = card.closest('.payment-method');
+                if (wrapper) wrapper.classList.toggle('is-selected', isChecked);
+            });
+        }
+
+        function bindOptionSelection(groupName) {
+            const group = document.querySelector(`[data-option-group="${groupName}"]`);
+            if (!group) return;
+            group.addEventListener('change', (event) => {
+                if (event.target && event.target.matches('input[type="radio"]')) {
+                    updateOptionSelections(groupName);
+                }
+            });
+            updateOptionSelections(groupName);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            bindOptionSelection('shipping');
+            bindOptionSelection('payment');
+        });
+
+        function normalizeCart(cart) {
+            return (Array.isArray(cart) ? cart : []).map((item) => {
+                if (!item) return null;
+                return {
+                    ...item,
+                    price: parsePriceValue(item.price),
+                    quantity: Math.max(1, parseInt(item.quantity, 10) || 1)
+                };
+            }).filter(Boolean);
+        }
+
+        function readCartFromUrl() {
+            try {
+                const params = new URLSearchParams(window.location.search || '');
+                const encoded = params.get('cart');
+                if (!encoded) return [];
+                const parsed = JSON.parse(decodeURIComponent(encoded));
+                return normalizeCart(coerceCartArray(parsed));
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function readCartFromWindowName() {
+            try {
+                const parsed = window.name ? JSON.parse(window.name) : null;
+                if (!parsed) return [];
+                return normalizeCart(coerceCartArray(parsed.corriesells_cart || parsed));
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function readCartFromStorage() {
+            try {
+                const raw = localStorage.getItem(STORAGE_CART);
+                const parsed = raw ? JSON.parse(raw) : [];
+                return normalizeCart(coerceCartArray(parsed));
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function getCart() {
+            const fromUrl = readCartFromUrl();
+            if (fromUrl.length) return fromUrl;
+            const fromName = readCartFromWindowName();
+            if (fromName.length) return fromName;
+            return readCartFromStorage();
+        }
+
+        function saveCart(cart) {
+            try {
+                if (window.saveCart) return window.saveCart(cart);
+                localStorage.setItem(STORAGE_CART, JSON.stringify(cart));
+            } catch (e) {}
+            try {
+                window.name = JSON.stringify({ corriesells_cart: cart, ts: Date.now() });
+            } catch (e) {}
+        }
+
+        function formatCurrency(value) {
+            return `$${(parsePriceValue(value) || 0).toFixed(2)}`;
+        }
+
+        function getSelectedShippingDetails() {
+            const selected = document.querySelector('input[name="shipping"]:checked');
+            if (!selected) {
+                return { id: 'free', cost: 0, label: 'Standard delivery', eta: '3-5 days' };
+            }
+            const cost = parsePriceValue(selected.dataset.cost);
+            const label = selected.dataset.label || (selected.value === 'express' ? 'Express delivery' : 'Standard delivery');
+            const eta = selected.dataset.eta || (selected.value === 'express' ? '1-2 days' : '3-5 days');
+            return {
+                id: selected.value || 'free',
+                cost: Number.isFinite(cost) ? cost : (selected.value === 'express' ? 15 : 0),
+                label,
+                eta
+            };
+        }
+
+        function getShippingCost() {
+            return getSelectedShippingDetails().cost;
+        }
+
+        function renderSummary() {
+            const itemsEl = document.getElementById('orderItems');
+            const subtotalEl = document.getElementById('summarySubtotal');
+            const shippingEl = document.getElementById('summaryShipping');
+            const shippingLabelEl = document.getElementById('summaryShippingLabel');
+            const taxEl = document.getElementById('summaryTax');
+            const totalEl = document.getElementById('summaryTotal');
+
+            const cart = getCart();
+            if (!cart.length) {
+                itemsEl.innerHTML = `
+                    <div class="summary-item">
+                        <div>
+                            <p style="margin:0;font-weight:600;">Your cart is empty</p>
+                            <div class="summary-meta">Add items to see them here.</div>
+                        </div>
+                        <div style="font-weight:600;">$0.00</div>
+                    </div>
+                `;
+            } else {
+                itemsEl.innerHTML = cart.map((item) => {
+                    const lineTotal = (item.price || 0) * (item.quantity || 1);
+                    const optionLabel = item.options && (item.options.size || item.options.color)
+                        ? [item.options.size && `Size: ${item.options.size}`, item.options.color && `Color: ${item.options.color}`].filter(Boolean).join(' · ')
+                        : 'Standard';
+                    return `
+                        <div class="summary-item" style="align-items:flex-start;">
+                            <div style="display:flex; gap: var(--spacing-md);">
+                                ${item.image ? `<img src="${item.image}" alt="" class="summary-image">` : `<div class="summary-image"></div>`}
+                                <div>
+                                    <p style="margin:0;" class="summary-product-name">${item.name || 'Item'} × ${item.quantity || 1}</p>
+                                    <div class="summary-meta">${optionLabel}</div>
+                                </div>
+                            </div>
+                            <div style="font-weight:600;">${formatCurrency(lineTotal)}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0);
+            const shippingDetails = getSelectedShippingDetails();
+            const shipping = shippingDetails.cost;
+            const tax = subtotal * TAX_RATE;
+            const total = subtotal + shipping + tax;
+
+            subtotalEl.textContent = formatCurrency(subtotal);
+            shippingEl.textContent = shipping === 0 ? 'Free' : formatCurrency(shipping);
+            if (shippingLabelEl) {
+                const details = shippingDetails.label && shippingDetails.eta
+                    ? `${shippingDetails.label} · ${shippingDetails.eta}`
+                    : (shippingDetails.label || shippingDetails.eta || 'Shipping');
+                shippingLabelEl.textContent = details;
+            }
+            taxEl.textContent = formatCurrency(tax);
+            totalEl.textContent = formatCurrency(total);
+        }
+
+        function getStoredUser() {
+            if (typeof window.readStoredUser === 'function') {
+                const user = window.readStoredUser();
+                if (user) return user;
+            }
+            try {
+                const raw = localStorage.getItem(STORAGE_USER);
+                return raw ? JSON.parse(raw) : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function syncUserRecord(updatedUser) {
+            if (!updatedUser) return;
+            try {
+                localStorage.setItem(STORAGE_USER, JSON.stringify(updatedUser));
+            } catch (e) {}
+            try {
+                if (typeof window.setWindowNameData === 'function') {
+                    window.setWindowNameData({ corriesells_user: updatedUser });
+                }
+            } catch (e) {}
+            try {
+                const raw = localStorage.getItem(STORAGE_USERS);
+                const users = raw ? JSON.parse(raw) : [];
+                if (!Array.isArray(users)) return;
+                const match = (entry) => {
+                    if (!entry) return false;
+                    if (updatedUser.id && entry.id && entry.id === updatedUser.id) return true;
+                    if (updatedUser.email && entry.email) {
+                        return String(entry.email).toLowerCase() === String(updatedUser.email).toLowerCase();
+                    }
+                    return false;
+                };
+                const index = users.findIndex(match);
+                if (index > -1) {
+                    users[index] = { ...users[index], shippingPreference: updatedUser.shippingPreference };
+                    localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+                }
+            } catch (e) {}
+        }
+
+        function loadShippingPreference() {
+            const user = getStoredUser();
+            const userPref = user && user.shippingPreference ? user.shippingPreference : null;
+            let pref = userPref;
+            if (!pref) {
+                try {
+                    pref = localStorage.getItem(STORAGE_SHIPPING_PREF);
+                } catch (e) {
+                    pref = null;
+                }
+            }
+            if (!pref) return;
+            const input = document.querySelector(`input[name="shipping"][value="${pref}"]`);
+            if (input) input.checked = true;
+        }
+
+        function saveShippingPreference() {
+            const selected = document.querySelector('input[name="shipping"]:checked');
+            if (!selected) return;
+            const user = getStoredUser();
+            if (user) {
+                user.shippingPreference = selected.value;
+                syncUserRecord(user);
+                return;
+            }
+            try {
+                localStorage.setItem(STORAGE_SHIPPING_PREF, selected.value);
+            } catch (e) {}
+        }
+
+        function togglePaymentFields() {
+            const selected = document.querySelector('input[name="payment"]:checked');
+            const methods = Array.from(document.querySelectorAll('.payment-method'));
+            const method = selected ? selected.value : 'card';
+            const isCard = method === 'card';
+            const isPaypal = method === 'paypal';
+
+            const cardFields = document.getElementById('cardFields');
+            const paypalFields = document.getElementById('paypalFields');
+            const paypalEmail = document.getElementById('paypalEmail');
+
+            // Toggle selection styling + aria
+            methods.forEach((wrap) => {
+                const input = wrap.querySelector('input[name="payment"]');
+                const isSelected = input && input.checked;
+                wrap.classList.toggle('is-selected', !!isSelected);
+                const panel = wrap.querySelector('.payment-panel');
+                if (panel) panel.setAttribute('aria-hidden', isSelected ? 'false' : 'true');
+            });
+
+            // Required fields per method
+            (cardFields?.querySelectorAll('input') || []).forEach((input) => {
+                if (isCard) input.setAttribute('required', 'required');
+                else input.removeAttribute('required');
+            });
+            if (paypalEmail) {
+                if (isPaypal) paypalEmail.setAttribute('required', 'required');
+                else paypalEmail.removeAttribute('required');
+            }
+            // Focus first visible field of selected method for quick entry
+            const focusTarget = isCard
+                ? cardFields?.querySelector('input')
+                : isPaypal
+                    ? paypalEmail
+                    : null;
+            if (focusTarget) setTimeout(() => focusTarget.focus({ preventScroll: true }), 120);
+
+            // Scroll into view on narrow screens
+            if (window.matchMedia('(max-width: 900px)').matches) {
+                const selectedCard = selected?.closest('.payment-method');
+                if (selectedCard && typeof selectedCard.scrollIntoView === 'function') {
+                    selectedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        function readShippingAddress() {
+            const getValue = (id) => (document.getElementById(id)?.value || '').trim();
+            return {
+                firstName: getValue('shipFirstName'),
+                lastName: getValue('shipLastName'),
+                email: getValue('shipEmail'),
+                phone: getValue('shipPhone'),
+                line1: getValue('shipLine1'),
+                line2: getValue('shipLine2'),
+                city: getValue('shipCity'),
+                state: getValue('shipState'),
+                postal: getValue('shipPostal'),
+                country: getValue('shipCountry'),
+                notes: getValue('shipNotes')
+            };
+        }
+
+        function notifyUser(message, type = 'error') {
+            if (typeof window.showNotification === 'function') {
+                window.showNotification(message, type, 3000);
+            } else if (typeof window.showMessageDialog === 'function') {
+                const titleMap = {
+                    success: 'Success',
+                    error: 'Please Check',
+                    warning: 'Heads Up',
+                    info: 'Notice'
+                };
+                window.showMessageDialog(message, {
+                    title: titleMap[type] || 'Notice',
+                    tone: type || 'info',
+                    confirmText: 'OK'
+                });
+            } else {
+                const fallback = document.createElement('div');
+                fallback.textContent = String(message || '');
+                fallback.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:6000;background:#1a1a1a;color:#fff;padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.2);';
+                document.body.appendChild(fallback);
+                setTimeout(() => fallback.remove(), 2500);
+            }
+        }
+
+        function validateShippingAddress() {
+            const requiredFields = [
+                { id: 'shipFirstName', label: 'First name' },
+                { id: 'shipLastName', label: 'Last name' },
+                { id: 'shipEmail', label: 'Email' },
+                { id: 'shipPhone', label: 'Phone' },
+                { id: 'shipLine1', label: 'Street address' },
+                { id: 'shipCity', label: 'City' },
+                { id: 'shipState', label: 'State' },
+                { id: 'shipPostal', label: 'Postal code' },
+                { id: 'shipCountry', label: 'Country' }
+            ];
+
+            for (const field of requiredFields) {
+                const el = document.getElementById(field.id);
+                const value = (el?.value || '').trim();
+                if (!value) {
+                    notifyUser(`Please enter your ${field.label}.`);
+                    if (el && typeof el.focus === 'function') el.focus();
+                    return false;
+                }
+            }
+
+            const email = (document.getElementById('shipEmail')?.value || '').trim();
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                const emailEl = document.getElementById('shipEmail');
+                notifyUser('Please enter a valid email address.');
+                if (emailEl && typeof emailEl.focus === 'function') emailEl.focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        function validatePaymentDetails() {
+            const method = document.querySelector('input[name="payment"]:checked')?.value || 'card';
+
+            if (method === 'paypal') {
+                const paypalEmail = (document.getElementById('paypalEmail')?.value || '').trim();
+                if (!paypalEmail) {
+                    notifyUser('Please enter your PayPal email address.');
+                    document.getElementById('paypalEmail')?.focus();
+                    return false;
+                }
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(paypalEmail)) {
+                    notifyUser('Please enter a valid PayPal email address.');
+                    document.getElementById('paypalEmail')?.focus();
+                    return false;
+                }
+                return true;
+            }
+
+            if (method !== 'card') {
+                return true;
+            }
+
+            const requiredIds = ['cardName', 'cardNumber', 'cardExpiry', 'cardCvv'];
+            for (const id of requiredIds) {
+                const value = (document.getElementById(id)?.value || '').trim();
+                if (!value) {
+                    notifyUser('Please complete your card details.');
+                    document.getElementById(id)?.focus();
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function getUserAddresses() {
+            const user = getStoredUser();
+            const all = readJson(STORAGE_ADDRESSES, []);
+            if (!Array.isArray(all) || !all.length) return [];
+            if (!user) return [];
+            const userId = user.id || null;
+            const userEmail = user.email ? normalizeEmail(user.email) : null;
+            return all.filter((address) => {
+                if (!address) return false;
+                if (userId && address.userId && address.userId === userId) return true;
+                if (userEmail && address.email && normalizeEmail(address.email) === userEmail) return true;
+                return false;
+            });
+        }
+
+        function applyAddress(address) {
+            if (!address) return;
+            const set = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.value = value || '';
+            };
+            set('shipFirstName', address.firstName);
+            set('shipLastName', address.lastName);
+            set('shipEmail', address.email);
+            set('shipPhone', address.phone);
+            set('shipLine1', address.line1);
+            set('shipLine2', address.line2);
+            set('shipCity', address.city);
+            set('shipState', address.state);
+            set('shipPostal', address.postal);
+            set('shipCountry', address.country);
+        }
+
+        function initSavedAddresses() {
+            const select = document.getElementById('savedAddressSelect');
+            const applyBtn = document.getElementById('applySavedAddressBtn');
+            const emptyNote = document.getElementById('savedAddressEmpty');
+            if (!select || !applyBtn) return;
+
+            const addresses = getUserAddresses();
+            if (!addresses.length) {
+                if (emptyNote) emptyNote.style.display = 'block';
+                select.disabled = true;
+                applyBtn.disabled = true;
+                return;
+            }
+
+            const buildLabel = (address) => {
+                const name = [address.firstName, address.lastName].filter(Boolean).join(' ').trim();
+                const line = [address.line1, address.city].filter(Boolean).join(', ');
+                return [name, line].filter(Boolean).join(' — ') || 'Saved Address';
+            };
+
+            addresses.forEach((address) => {
+                const option = document.createElement('option');
+                option.value = address.id || '';
+                option.textContent = buildLabel(address);
+                if (address.isDefault) option.dataset.default = 'true';
+                select.appendChild(option);
+            });
+
+            const defaultAddress = addresses.find((address) => address.isDefault) || addresses[0];
+            if (defaultAddress && select.value === '') {
+                select.value = defaultAddress.id || '';
+                const hasExisting = ['shipFirstName','shipLastName','shipEmail','shipPhone','shipLine1','shipCity','shipState','shipPostal']
+                    .some((id) => (document.getElementById(id)?.value || '').trim().length > 0);
+                if (!hasExisting) applyAddress(defaultAddress);
+            }
+
+            applyBtn.addEventListener('click', () => {
+                const selectedId = select.value;
+                const address = addresses.find((entry) => entry.id === selectedId) || defaultAddress;
+                if (address) applyAddress(address);
+            });
+        }
+
+        function hashToDigits(value, length = 12) {
+            const str = String(value || '');
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
+            }
+            let output = String(hash);
+            while (output.length < length) {
+                hash = (hash * 33 + 7) >>> 0;
+                output += String(hash).padStart(10, '0');
+            }
+            return output.slice(0, length);
+        }
+
+        function getTrackingCarrier(shippingDetails) {
+            const method = String(shippingDetails?.id || shippingDetails?.label || '').toLowerCase();
+            if (method.includes('express')) return 'FedEx';
+            if (method.includes('standard') || method.includes('free')) return 'UPS';
+            if (method.includes('international')) return 'DHL';
+            return 'UPS';
+        }
+
+        function buildTrackingNumber(orderId, createdAt, carrier) {
+            const seed = `${carrier || 'CSE'}-${orderId || ''}-${createdAt || ''}`;
+            const digits = hashToDigits(seed, 12);
+            const token = String(carrier || '').toLowerCase();
+            const prefix = token.includes('fedex') ? 'FDX' : token.includes('dhl') ? 'DHL' : '1Z';
+            return `${prefix}${digits}`;
+        }
+
+        function buildTrackingUrl(carrier, number) {
+            const code = encodeURIComponent(number || '');
+            if (!code) return '';
+            const token = String(carrier || '').toLowerCase();
+            if (token.includes('fedex')) return `https://www.fedex.com/fedextrack/?trknbr=${code}`;
+            if (token.includes('dhl')) return `https://www.dhl.com/en/express/tracking.html?AWB=${code}`;
+            return `https://www.ups.com/track?tracknum=${code}`;
+        }
+
+        function placeOrder(options = {}) {
+            const cart = getCart();
+            if (!cart.length) {
+                notifyUser('Your cart is empty.');
+                return;
+            }
+            if (!options.skipShippingValidation && !validateShippingAddress()) return;
+            if (!validatePaymentDetails()) return;
+            const shippingDetails = getSelectedShippingDetails();
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0);
+            const shipping = shippingDetails.cost;
+            const tax = subtotal * TAX_RATE;
+            const total = subtotal + shipping + tax;
+            const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'card';
+            const shippingAddress = readShippingAddress();
+            const createdAt = new Date().toISOString();
+            const orderId = `ORD-${Date.now()}`;
+            const trackingCarrier = getTrackingCarrier(shippingDetails);
+            const trackingNumber = buildTrackingNumber(orderId, createdAt, trackingCarrier);
+            const trackingUrl = buildTrackingUrl(trackingCarrier, trackingNumber);
+
+            const order = {
+                id: orderId,
+                items: cart,
+                subtotal,
+                shipping,
+                shippingMethod: shippingDetails.id,
+                shippingLabel: shippingDetails.label,
+                shippingEta: shippingDetails.eta,
+                trackingCarrier,
+                trackingNumber,
+                trackingUrl,
+                trackingEta: shippingDetails.eta,
+                tax,
+                total,
+                paymentMethod,
+                shippingAddress,
+                shippingNotes: shippingAddress.notes || '',
+                createdAt,
+                status: 'Processing'
+            };
+
+            try {
+                const existing = JSON.parse(localStorage.getItem(STORAGE_ORDERS) || '[]');
+                existing.unshift(order);
+                localStorage.setItem(STORAGE_ORDERS, JSON.stringify(existing));
+            } catch (e) {}
+
+            saveCart([]);
+            if (window.updateCartUI) window.updateCartUI();
+
+            notifyUser('Order placed successfully!', 'success');
+            window.location.href = 'account.html';
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadShippingPreference();
+            updateOptionSelections('shipping');
+            updateOptionSelections('payment');
+            renderSummary();
+            document.querySelectorAll('input[name="shipping"]').forEach((input) => {
+                input.addEventListener('change', () => {
+                    saveShippingPreference();
+                    renderSummary();
+                });
+            });
+            document.querySelectorAll('input[name="payment"]').forEach((input) => {
+                input.addEventListener('change', togglePaymentFields);
+            });
+            togglePaymentFields();
+            initSavedAddresses();
+
+            const selectPaymentMethod = (value) => {
+                const input = document.querySelector(`input[name="payment"][value="${value}"]`);
+                if (!input) return;
+                input.checked = true;
+                updateOptionSelections('payment');
+                togglePaymentFields();
+                if (value === 'paypal') {
+                    document.getElementById('paypalEmail')?.focus();
+                }
+            };
+
+            const googlePayQuickBtn = document.getElementById('googlePayQuickBtn');
+            if (googlePayQuickBtn) {
+                googlePayQuickBtn.addEventListener('click', () => {
+                    selectPaymentMethod('googlepay');
+                    togglePaymentFields();
+                    updateOptionSelections('payment');
+                    notifyUser('Redirecting to Google Pay...', 'info');
+                    setTimeout(() => {
+                        placeOrder({ skipShippingValidation: true });
+                    }, 450);
+                });
+            }
+
+            const placeBtn = document.getElementById('placeOrderBtn');
+            if (placeBtn) placeBtn.addEventListener('click', placeOrder);
+
+            if (window.matchMedia('(max-width: 720px)').matches) {
+                const autoFocusField = document.getElementById('shipFirstName');
+                if (autoFocusField) {
+                    setTimeout(() => {
+                        autoFocusField.focus();
+                    }, 600);
+                }
+            }
+        });
+
+        window.addEventListener('pageshow', renderSummary);
+        })();
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORRIESELLS - Premium clothing brand inspired by cowrie shell aesthetics. Sustainable, stylish apparel with a bohemian twist.">
+    <meta name="keywords" content="clothing, fashion, bohemian, sustainable, premium">
+    <meta name="author" content="CORRIESELLS">
+    <meta property="og:title" content="CORRIESELLS - Your Cart's New Best Friend">
+    <meta property="og:description" content="Premium clothing inspired by cowrie shells">
+    <meta property="og:image" content="./assets/images/og-image.jpg">
+    <meta name="theme-color" content="#000000">
+    
+    <title>CORRIESELLS - Premium Clothing | Bohemian Fashion</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@300;400;500;600;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    <link rel="stylesheet" href="./assets/css/pro.css">
+</head>
+
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="header-wrapper">
+            <div class="container">
+                <div class="header-container">
+                    <!-- Logo -->
+                    <div class="logo">
+                        <a href="index.html">
+                            <img src="./assets/images/logo.png" alt="CORRIESELLS Logo" class="logo-image" >
+                            <span>CORRIESELLS</span>
+                        </a>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search products...">
+                    </div>
+
+                    <!-- Navigation -->
+                    <nav>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li class="dropdown">
+                                <a href="pages/shop.html">Shop</a>
+                                <div class="dropdown-menu">
+                                    <a href="pages/shop.html?category=mens">Men's</a>
+                                    <a href="pages/shop.html?category=womens">Women's</a>
+                                    <a href="pages/shop.html?category=kids">Kids'</a>
+                                    <a href="pages/shop.html?category=accessories">Accessories</a>
+                                    <a href="pages/shop.html?category=beachwear">Beachwear</a>
+                                    <a href="pages/shop.html?category=sale">Sale</a>
+                                </div>
+                            </li>
+                            <li><a href="pages/about.html">About Us</a></li>
+                            <li><a href="pages/contact.html">Contact</a></li>
+                            <li><a href="pages/blog.html">Blog</a></li>
+                            <li class="nav-desktop-only"><a href="pages/wishlist.html"><i class="far fa-heart"></i> Wishlist</a></li>
+                        </ul>
+                    </nav>
+
+                    <!-- Header Icons -->
+                    <div class="header-icons">
+                        <button class="icon-btn account-btn" onclick="window.location.href='pages/account.html'" aria-label="Account">
+                            <img class="account-avatar-image" alt="" loading="lazy">
+                            <i class="fas fa-user account-avatar-icon" aria-hidden="true"></i>
+                        </button>
+                        <button class="cart-icon icon-btn">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="badge" style="display: none;">0</span>
+                        </button>
+                        <div class="mobile-menu-toggle">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="modal-close cart-close">×</button>
+        </div>
+        <div class="cart-body">
+            <p class="text-center text-muted">Your cart is empty</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Subtotal:</span>
+                <span class="cart-total-amount">$0.00</span>
+            </div>
+            <div class="cart-actions">
+                <button class="btn btn-secondary" onclick="closeCart()">Continue Shopping</button>
+                <a class="btn btn-primary" data-checkout href="pages/checkout.html" onclick="if(window.startCheckout){startCheckout(); return false;}">Checkout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>CORRIESELLS</h1>
+            <p class="hero-subtitle">Premium Clothing Inspired by Nature's Beauty</p>
+            <div class="hero-cta">
+                <button class="btn btn-primary btn-lg" onclick="window.location.href='pages/shop.html'">
+                    <i class="fas fa-shopping-bag"></i> Shop Now
+                </button>
+                <button class="btn btn-secondary btn-lg" onclick="window.location.href='pages/about.html'">
+                    <i class="fas fa-info-circle"></i> Learn More
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Promotional Banner -->
+    <section style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); padding: var(--spacing-lg); text-align: center; color: var(--bg-primary);">
+        <h3 style="margin-bottom: 0;"><i class="fas fa-tag"></i> Summer Sale - 40% Off Select Items!</h3>
+        <p style="margin-bottom: 0; margin-top: var(--spacing-sm);">Use code: <strong>SUMMER40</strong> at checkout</p>
+    </section>
+
+    <!-- Featured Categories -->
+    <section class="container">
+        <h2 class="section-title">Shop by Category</h2>
+        <div class="grid grid-3 category-grid">
+            <div class="card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=400&h=300&fit=crop" alt="Women's Fashion">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Women's Collection</h3>
+                    <p class="card-text">Elegant and sustainable styles for every occasion</p>
+                    <a href="pages/shop.html?category=womens" class="btn btn-primary btn-sm">Shop Women</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-image">
+                    <img src="https://user2409.na.imgto.link/public/20260213/6d399804bfb3082d73c6e5ee9bcab81a-2.avif" alt="Men's Fashion">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Men's Collection</h3>
+                    <p class="card-text">Sophisticated designs with a bohemian edge</p>
+                    <a href="pages/shop.html?category=mens" class="btn btn-primary btn-sm">Shop Men</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-image">
+                    <img src="https://user2408.na.imgto.link/public/20260213/3d069dbd4c7364319108e9064a882e28-2.avif" alt="Kids' Fashion">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Kids' Collection</h3>
+                    <p class="card-text">Playful, comfy styles built for everyday adventures</p>
+                    <a href="pages/shop.html?category=kids" class="btn btn-primary btn-sm">Shop Kids</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-image">
+                    <img src="https://wwd.com/wp-content/uploads/2020/04/l1001344.jpg?w=1000&h=563&crop=1&resize=681%2C383" alt="Beachwear">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Beachwear</h3>
+                    <p class="card-text">Perfect for your coastal adventures</p>
+                    <a href="pages/shop.html?category=beachwear" class="btn btn-primary btn-sm">Shop Beachwear</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Arrivals -->
+    <section class="container">
+        <h2 class="section-title">New Arrivals</h2>
+        <p class="section-subtitle">Discover our latest designs, freshly added to your favorite collection</p>
+        <div class="grid grid-3">
+            <!-- Product Card 1 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop" alt="Premium Linen Shirt">
+                    <div class="product-badge">New</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Shirts</div>
+                    <h3 class="product-title">Premium Linen Shirt</h3>
+                    <div class="product-availability" data-availability-for="product-1">Available: --</div>
+                    <div class="product-rating">
+                        <div class="stars">★★★★★</div>
+                        <span>(124 reviews)</span>
+                    </div>
+                    <div class="product-price-group">
+                        <span class="product-price">$89.99</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary btn-sm" onclick="window.location.href='pages/product.html?product=product-1'">View</button>
+                        <button class="btn btn-primary" onclick="addToCart('product-1')">
+                            <i class="fas fa-shopping-bag"></i> Add to Cart
+                        </button>
+                            <button class="btn btn-outline" data-wishlist="product-1">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card 2 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://cdn.shopify.com/s/files/1/0742/6628/0191/files/PSBW0129-41_Baby_Blue_35046e87-e338-4169-8635-8cda4a267fd2.jpg?v=1753325186" alt="Silk Summer Dress">
+                    <div class="product-badge">Sale</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Dresses</div>
+                    <h3 class="product-title">Silk Summer Dress</h3>
+                    <div class="product-availability" data-availability-for="product-2">Available: --</div>
+                    <div class="product-rating">
+                        <div class="stars">★★★★</div>
+                        <span>(98 reviews)</span>
+                    </div>
+                    <div class="product-price-group">
+                        <span class="product-price">$124.99</span>
+                        <span class="product-original-price">$199.99</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary btn-sm" onclick="window.location.href='pages/product.html?product=product-2'">View</button>
+                        <button class="btn btn-primary" onclick="addToCart('product-2')">
+                            <i class="fas fa-shopping-bag"></i> Add to Cart
+                        </button>
+                            <button class="btn btn-outline" data-wishlist="product-2">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card 3 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://user2409.na.imgto.link/public/20260213/31639deb36c5ebb9bcf2fe95ba42a0fb-2.avif" alt="Casual Cotton Pants">
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Bottoms</div>
+                    <h3 class="product-title">Casual Cotton Pants</h3>
+                    <div class="product-availability" data-availability-for="product-3">Available: --</div>
+                    <div class="product-rating">
+                        <div class="stars">★★★★★</div>
+                        <span>(156 reviews)</span>
+                    </div>
+                    <div class="product-price-group">
+                        <span class="product-price">$76.99</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary btn-sm" onclick="window.location.href='pages/product.html?product=product-3'">View</button>
+                        <button class="btn btn-primary" onclick="addToCart('product-3')">
+                            <i class="fas fa-shopping-bag"></i> Add to Cart
+                        </button>
+                            <button class="btn btn-outline" data-wishlist="product-3">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card 4 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://user2409.na.imgto.link/public/20260213/19bef441c1a5e315ef183daf92bfa7d6-2.avif" alt="Organic Hoodie">
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Hoodies</div>
+                    <h3 class="product-title">Organic Cotton Hoodie</h3>
+                    <div class="product-availability" data-availability-for="product-4">Available: --</div>
+                    <div class="product-rating">
+                        <div class="stars">★★★★★</div>
+                        <span>(87 reviews)</span>
+                    </div>
+                    <div class="product-price-group">
+                        <span class="product-price">$99.99</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary btn-sm" onclick="window.location.href='pages/product.html?product=product-4'">View</button>
+                        <button class="btn btn-primary" onclick="addToCart('product-4')">
+                            <i class="fas fa-shopping-bag"></i> Add to Cart
+                        </button>
+                            <button class="btn btn-outline" data-wishlist="product-4">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card 5 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://www.copacabanabw.com/cdn/shop/files/Screenshot_2023-08-30_at_12.08.43_PM_2000x.png?v=1693466912" alt="Beach Cover-Up">
+                    <div class="product-badge">New</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Beachwear</div>
+                    <h3 class="product-title">Linen Beach Cover-Up</h3>
+                    <div class="product-availability" data-availability-for="product-13">Available: --</div>
+                    <div class="product-rating">
+                        <div class="stars">★★★★</div>
+                        <span>(42 reviews)</span>
+                    </div>
+                    <div class="product-price-group">
+                        <span class="product-price">$64.99</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary btn-sm" onclick="window.location.href='pages/product.html?product=product-13'">View</button>
+                        <button class="btn btn-primary" onclick="addToCart('product-13')">
+                            <i class="fas fa-shopping-bag"></i> Add to Cart
+                        </button>
+                            <button class="btn btn-outline" data-wishlist="product-13">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card 6 -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://m.media-amazon.com/images/I/715WAlsFLhL._SX679_.jpg" alt="Accessories Set">
+                </div>
+                <div class="product-info">
+                    <div class="product-category">Accessories</div>
+                    <h3 class="product-title">Premium Accessories Set</h3>
+                    <div class="product-availability" data-availability-for="product-6">Available: --</div>
+                    <div class="product-rating">
+                        <div class="stars">★★★★★</div>
+                        <span>(203 reviews)</span>
+                    </div>
+                    <div class="product-price-group">
+                        <span class="product-price">$49.99</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary btn-sm" onclick="window.location.href='pages/product.html?product=product-6'">View</button>
+                        <button class="btn btn-primary" onclick="addToCart('product-6')">
+                            <i class="fas fa-shopping-bag"></i> Add to Cart
+                        </button>
+                            <button class="btn btn-outline" data-wishlist="product-6">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: var(--spacing-2xl);">
+            <a href="pages/shop.html" class="btn btn-secondary btn-lg">View All Products</a>
+        </div>
+    </section>
+
+    <!-- Best Sellers -->
+    <section class="best-sellers-section">
+        <div class="container">
+            <div class="best-sellers-header">
+                <div>
+                    <p class="best-sellers-kicker">Customer Favorites</p>
+                    <h2 class="section-title best-sellers-title">Best Sellers</h2>
+                    <p class="section-subtitle best-sellers-subtitle">Our most re-ordered pieces this month, selected for fit, durability, and everyday wear.</p>
+                </div>
+                <a href="pages/shop.html" class="btn btn-secondary btn-sm best-sellers-link">View Full Collection</a>
+            </div>
+
+            <div class="best-sellers-metrics">
+                <div class="best-seller-metric">
+                    <strong>4.9/5</strong>
+                    <span>Average customer rating</span>
+                </div>
+                <div class="best-seller-metric">
+                    <strong>9.2k+</strong>
+                    <span>Units sold in the last 30 days</span>
+                </div>
+                <div class="best-seller-metric">
+                    <strong>98%</strong>
+                    <span>Customers who would buy again</span>
+                </div>
+            </div>
+
+            <div class="grid grid-3 best-sellers-grid">
+                <div class="product-card best-seller-card">
+                    <span class="best-seller-rank">#1</span>
+                    <div class="product-image">
+                        <img src="https://user2409.na.imgto.link/public/20260213/5f955c87088a95799b03167846b42978-2.avif" alt="Men's Cotton Pants">
+                        <div class="product-badge best-seller-badge">Top Rated</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Men's</div>
+                        <h3 class="product-title">Men's Cotton Pants</h3>
+                        <div class="product-availability" data-availability-for="product-7">Available: --</div>
+                        <div class="product-rating">
+                            <div class="stars">★★★★★</div>
+                            <span>(487 reviews)</span>
+                        </div>
+                        <p class="best-seller-proof"><i class="fas fa-fire"></i> 2,100+ sold this month</p>
+                        <div class="product-price-group">
+                            <span class="product-price">$69.99</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-sm" onclick="window.location.href='pages/product.html?product=product-7'">View</button>
+                            <button class="btn btn-primary" onclick="addToCart('product-7')">
+                                <i class="fas fa-shopping-bag"></i> Add to Cart
+                            </button>
+                            <button class="btn btn-outline" data-wishlist="product-7">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card best-seller-card">
+                    <span class="best-seller-rank">#2</span>
+                    <div class="product-image">
+                        <img src="https://user2408.na.imgto.link/public/20260213/41595d1f03606a2c5fce96505b9c4485-2.avif" alt="Men's Resort Shirt">
+                        <div class="product-badge best-seller-badge">Fast Moving</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Men's</div>
+                        <h3 class="product-title">Men's Resort Shirt</h3>
+                        <div class="product-availability" data-availability-for="product-8">Available: --</div>
+                        <div class="product-rating">
+                            <div class="stars">★★★★★</div>
+                            <span>(342 reviews)</span>
+                        </div>
+                        <p class="best-seller-proof"><i class="fas fa-chart-line"></i> Trending in warm-weather style</p>
+                        <div class="product-price-group">
+                            <span class="product-price">$74.99</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-sm" onclick="window.location.href='pages/product.html?product=product-8'">View</button>
+                            <button class="btn btn-primary" onclick="addToCart('product-8')">
+                                <i class="fas fa-shopping-bag"></i> Add to Cart
+                            </button>
+                            <button class="btn btn-outline" data-wishlist="product-8">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card best-seller-card">
+                    <span class="best-seller-rank">#3</span>
+                    <div class="product-image">
+                        <img src="https://user2408.na.imgto.link/public/20260213/818de5588d7337d08a3d17e426f9c4ba-2.avif" alt="Men's Slim Chinos">
+                        <div class="product-badge best-seller-badge">Most Reordered</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Men's</div>
+                        <h3 class="product-title">Men's Slim Chinos</h3>
+                        <div class="product-availability" data-availability-for="product-9">Available: --</div>
+                        <div class="product-rating">
+                            <div class="stars">★★★★★</div>
+                            <span>(298 reviews)</span>
+                        </div>
+                        <p class="best-seller-proof"><i class="fas fa-repeat"></i> Frequent repeat purchase item</p>
+                        <div class="product-price-group">
+                            <span class="product-price">$79.99</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-sm" onclick="window.location.href='pages/product.html?product=product-9'">View</button>
+                            <button class="btn btn-primary" onclick="addToCart('product-9')">
+                                <i class="fas fa-shopping-bag"></i> Add to Cart
+                            </button>
+                            <button class="btn btn-outline" data-wishlist="product-9">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Signup -->
+    <section class="container">
+        <div style="background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(244,196,48,0.05)); padding: var(--spacing-2xl); border-radius: var(--radius-lg); border: var(--border-gold); text-align: center;">
+            <h2 style="color: var(--primary-color); margin-bottom: var(--spacing-md);">Join Our Community</h2>
+            <p style="color: var(--text-muted); margin-bottom: var(--spacing-lg); max-width: 600px; margin-left: auto; margin-right: auto;">
+                Subscribe for product drops, restocks, and member‑only offers. Unsubscribe anytime.
+            </p>
+            <form onsubmit="subscribeNewsletter(event)" style="display: flex; gap: var(--spacing-md); max-width: 500px; margin: 0 auto; flex-wrap: wrap;">
+                <input type="email" name="email" placeholder="you@company.com" required style="flex: 1; min-width: 250px; padding: var(--spacing-sm) var(--spacing-md); border: var(--border-gold); border-radius: var(--radius-md); background-color: var(--bg-secondary); color: var(--text-color);">
+                <button type="submit" class="btn btn-primary">Join List</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="container">
+        <h2 class="section-title">Why Choose CORRIESELLS?</h2>
+        <div class="grid grid-3">
+            <div class="card" style="text-align: center;">
+                <div style="padding: var(--spacing-xl); font-size: 3rem; color: var(--primary-color);">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">100% Sustainable</h3>
+                    <p class="card-text">Eco-friendly materials and ethical manufacturing practices</p>
+                </div>
+            </div>
+
+            <div class="card" style="text-align: center;">
+                <div style="padding: var(--spacing-xl); font-size: 3rem; color: var(--primary-color);">
+                    <i class="fas fa-shipping-fast"></i>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Free Shipping</h3>
+                    <p class="card-text">Standard 5-7 business days (free over $10,000), Express 2-3 business days ($15), Overnight ($30). 150+ countries with tracking included. <a href="pages/faq.html" style="color: var(--primary-color);">See FAQs</a></p>
+                </div>
+            </div>
+
+            <div class="card" style="text-align: center;">
+                <div style="padding: var(--spacing-xl); font-size: 3rem; color: var(--primary-color);">
+                    <i class="fas fa-redo"></i>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">30-Day Returns</h3>
+                    <p class="card-text">Hassle-free returns and exchanges, no questions asked</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content container">
+            <div class="footer-grid">
+                <!-- Footer About -->
+                <div class="footer-section">
+                    <h4>About CORRIESELLS</h4>
+                    <p style="color: var(--text-muted); margin-bottom: var(--spacing-lg);">
+                        Premium clothing brand inspired by the elegance of cowrie shells. Sustainable, stylish apparel with a bohemian twist.
+                    </p>
+                    <div class="social-links">
+                        <a href="https://instagram.com" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://facebook.com" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="https://twitter.com" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://pinterest.com" target="_blank" title="Pinterest"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="pages/shop.html">Shop</a></li>
+                        <li><a href="pages/about.html">About Us</a></li>
+                        <li><a href="pages/blog.html">Blog</a></li>
+                        <li><a href="pages/contact.html">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Customer Service -->
+                <div class="footer-section">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="pages/faq.html">FAQ</a></li>
+                        <li><a href="pages/returns.html">Returns & Refunds</a></li>
+                        <li><a href="pages/shipping.html">Shipping Info</a></li>
+                        <li><a href="pages/size-guide.html">Size Guide</a></li>
+                        <li><a href="pages/contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="pages/privacy.html">Privacy Policy</a></li>
+                        <li><a href="pages/terms.html">Terms of Service</a></li>
+                        <li><a href="pages/cookies.html">Cookie Policy</a></li>
+                        <li><a href="pages/accessibility.html">Accessibility</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <p style="color: var(--text-muted); margin-bottom: var(--spacing-md);">Get new arrivals, restocks, and private offers.</p>
+                    <form class="footer-newsletter" onsubmit="subscribeNewsletter(event)">
+                        <input type="email" name="email" placeholder="you@company.com" required>
+                        <button class="btn btn-primary" type="submit">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 CORRIESELLS. All rights reserved.</p>
+                <p>Designed with Our Developers for style-conscious, eco-conscious shoppers worldwide</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="./assets/js/main.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lczk2ksAAAAAAQBz9yJZKTFJhtzAvPzvbljnOq-"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        window.addEventListener('load', function() {
+            if (window.goToCheckout) return;
+            const mainScript = document.createElement('script');
+            mainScript.src = './assets/js/main.js';
+            document.body.appendChild(mainScript);
+        });
+    </script>
+    <script>
+        // Track page view
+        trackPageView('Home');
+    </script>
+
+    <!-- Google Analytics (placeholder) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        // gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+</body>
+
+</html>
+
+
